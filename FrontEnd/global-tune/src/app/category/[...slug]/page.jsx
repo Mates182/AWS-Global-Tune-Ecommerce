@@ -12,7 +12,6 @@ const loadProducts = async () => {
 async function CategoryPage({ params }) {
   const { slug } = params; // url segments
   const { products } = await loadProducts();
-  console.log(products);
   return (
     <div className="container row">
       <h1>

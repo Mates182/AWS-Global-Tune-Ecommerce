@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { useEffect } from "react";
-
+// TODO: Refactor navbar to separated components
 function Navbar() {
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
