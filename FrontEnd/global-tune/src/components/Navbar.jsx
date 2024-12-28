@@ -123,12 +123,12 @@ function Navbar() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/category/percution" className="dropdown-item">
+                  <Link href="/category/musical-instruments/percution" className="dropdown-item">
                     Percution
                   </Link>
                 </li>
                 <li>
-                  <Link href="/category/keyboards" className="dropdown-item">
+                  <Link href="/category/musical-instruments/keyboards" className="dropdown-item">
                     Keyboards
                   </Link>
                 </li>
