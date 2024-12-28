@@ -106,7 +106,6 @@ function Navbar() {
                 className="nav-link dropdown-toggle"
                 id="navbarDropdownMenuLink"
                 role="button"
-                data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 Products
@@ -116,17 +115,20 @@ function Navbar() {
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <Link href="#" className="dropdown-item">
+                  <Link
+                    href="/category/musical-instruments/guitars"
+                    className="dropdown-item"
+                  >
                     Guitars & Bass
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="dropdown-item">
+                  <Link href="/category/percution" className="dropdown-item">
                     Percution
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="dropdown-item">
+                  <Link href="/category/keyboards" className="dropdown-item">
                     Keyboards
                   </Link>
                 </li>

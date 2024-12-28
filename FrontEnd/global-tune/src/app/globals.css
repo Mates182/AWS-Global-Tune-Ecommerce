@@ -40,3 +40,15 @@ a {
     color-scheme: dark;
   }
 }
+
+/* Enable dropdown menu on hover */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0; /* Ensure dropdown aligns properly */
+}
+
+/* Prevent the dropdown menu from being hidden after hover ends */
+.nav-item.dropdown:hover > .nav-link {
+  color: #0056b3; /* Optional: Change the link color on hover */
+}
+
