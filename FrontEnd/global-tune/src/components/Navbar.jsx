@@ -43,12 +43,7 @@ function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link
-                href="#"
-                className="nav-link disabled"
-                tabIndex="-1"
-                aria-disabled="true"
-              >
+              <Link href="/cart" className="nav-link active">
                 Cart
               </Link>
             </li>
@@ -123,12 +118,18 @@ function Navbar() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/category/musical-instruments/percution" className="dropdown-item">
+                  <Link
+                    href="/category/musical-instruments/percution"
+                    className="dropdown-item"
+                  >
                     Percution
                   </Link>
                 </li>
                 <li>
-                  <Link href="/category/musical-instruments/keyboards" className="dropdown-item">
+                  <Link
+                    href="/category/musical-instruments/keyboards"
+                    className="dropdown-item"
+                  >
                     Keyboards
                   </Link>
                 </li>

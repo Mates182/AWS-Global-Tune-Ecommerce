@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import Breadcrumb from "@/components/Breadcrumb";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -24,7 +23,6 @@ export default function RootLayout({ children }) {
           <Navbar></Navbar>
         </header>
         <main className="container" style={{height: '1000px'}}>
-          <Breadcrumb />
           {children}
         </main>
         <footer></footer>

@@ -46,7 +46,7 @@ function AddToCartForm({ product }) {
               >
                 Continue Shopping
               </button>
-              {/* TODO: Create the cart view */}
+              {/* TODO: Validate if the user is logged in */}
               <Link
                 href="/cart"
                 onClick={() => {
