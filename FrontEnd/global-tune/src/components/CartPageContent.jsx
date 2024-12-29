@@ -3,17 +3,33 @@ import React, { useState } from "react";
 import Link from "next/link";
 
 function CartTable({ products }) {
+  const [productsTemp, setProductsTemp] = useState([...products]);
   const [focusedImg, setFocusedImg] = useState(-1);
   const [subtotal, setSubtotal] = useState(
-    Math.ceil(products.reduce((acc, el) => acc + el.price, 0) * 100) / 100
+    Math.ceil(productsTemp.reduce((acc, el) => acc + el.price*el.quantity, 0) * 100) / 100
   );
   const [shipping, setShipping] = useState(100);
   const [total, setTotal] = useState(subtotal + shipping);
 
   const [isTableModified, setIsTableModified] = useState(false);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setIsTableModified(false);
+    setProductsTemp(
+      productsTemp.map((product, i) => {
+        let productTemp = product;
+        productTemp.quantity = e.target[i * 2].value;
+        return productTemp;
+      })
+    );
+    setSubtotal(Math.ceil(productsTemp.reduce((acc, el) => acc + el.price*el.quantity, 0) * 100) / 100)
+    setTotal(subtotal + shipping)
+    // TODO: send a request to change values on cart on confirm changes Link
+  };
+
   return (
-    <div className="row">
+    <form onSubmit={onSubmit} className="row">
       <section className="col-8">
         <table className="table">
           <thead className="table-dark">
@@ -27,7 +43,7 @@ function CartTable({ products }) {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {productsTemp.map((product) => (
               <tr className="align-middle" key={product.id}>
                 <th scope="row">
                   <Link href={`/product/${product.id}`}>
@@ -54,6 +70,7 @@ function CartTable({ products }) {
                 <td>${product.price}</td>
                 <td>
                   <input
+                    id={`product${product.id}`}
                     type="number"
                     className="form-control"
                     defaultValue={product.quantity}
@@ -67,7 +84,18 @@ function CartTable({ products }) {
                   ${Math.ceil(product.quantity * product.price * 100) / 100}
                 </td>
                 <td>
-                  <button className="btn btn-outline-danger">X</button>
+                  {/**
+                   // TODO: implement delete function
+                   */}
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      alert("not implemented yet");
+                    }}
+                  >
+                    X
+                  </button>
                 </td>
               </tr>
             ))}
@@ -92,31 +120,32 @@ function CartTable({ products }) {
         </p>
         {/**
          // TODOs: 
-         *  use next/Link on the revert changes button
-         *  send a request to change values on cart on confirm changes Link
+         *  use next/Link on the revert changes <a>
          *  Redirect to billing details on Complete Purchase button*/}
         {isTableModified ? (
           <>
-            <Link
-              href="/cart"
-              className="btn btn-outline-warning w-100 mb-2"
-              onClick={() => {
-                setIsTableModified(false);
-              }}
-            >
+            <button className="btn btn-outline-warning w-100 mb-2">
               Confirm Changes
-            </Link>
-            <a href="/cart">
-              <button className="btn btn-outline-danger w-100">
+            </button>
+            <a href="/cart"
+                className="btn btn-outline-danger w-100"
+              >
                 Revert Changes
-              </button>
             </a>
           </>
         ) : (
-          <button className="btn btn-success w-100">Complete Purchase</button>
+          <button
+            className="btn btn-success w-100"
+            onClick={(e) => {
+              e.preventDefault();
+              alert("not implemented yet");
+            }}
+          >
+            Complete Purchase
+          </button>
         )}
       </section>
-    </div>
+    </form>
   );
 }
 
