@@ -8,7 +8,7 @@ function ProductCard({ product }) {
     <div className="card" key={product.id}>
       <img
         className="card-img-top"
-        src={product.images[0]}
+        src={product.thumbnail}
         alt={`${product.title} image`}
         style={{ maxHeight: "300px" }}
       />

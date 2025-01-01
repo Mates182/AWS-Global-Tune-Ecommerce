@@ -1,0 +1,86 @@
+[{
+  "id": "GTR-GIB-RD-001",
+  "title": "Gibson RD Artist Electric Guitar",
+  "description": "The Gibson RD Artist is a vintage-style electric guitar with a unique body shape, powerful humbucker pickups, and great sustain. Perfect for musicians looking for a classic rock sound.",
+  "category": "Electric Guitars",
+  "price": 1200,
+  "stock": 15,
+  "tags": [
+    "electric guitar",
+    "Gibson",
+    "vintage",
+    "RD Artist",
+    "humucker pickups"
+  ],
+  "brand": "Gibson",
+  "sku": "GTR-GIB-RD-001",
+  "weight": 3.8,
+  "dimensions": [
+    {
+      "length": 100,
+      "width": 40,
+      "height": 15
+    }
+  ],
+  "warranty": "2 years limited warranty from the manufacturer",
+  "reviews": [
+    {
+      "user": "JohnDoe",
+      "comment": "Incredible sound and playability. One of the best guitars I've ever played!",
+      "stars": 5
+    },
+    {
+      "user": "JaneDoe",
+      "comment": "Great guitar with a vintage tone. The black color looks amazing!",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://guitar-compare.com/wp-content/uploads/2017/12/Gibson-RD-Artist-2014_01.jpg",
+  "images": [
+    "https://guitar-compare.com/wp-content/uploads/2017/12/Gibson-RD-Artist-2014_01.jpg",
+    "https://cdn11.bigcommerce.com/s-dks6ju/images/stencil/original/products/2305/551650/vintage-1977-gibson-rd-artist-electric-guitar-black-finish__04170.1711526621.jpg?c=2"
+  ]
+},
+{
+  "id": "GTR-GRE-G5422TG-001",
+  "title": "Gretsch G5422TG Electromatic SW",
+  "description": "The Gretsch G5422TG Electromatic SW is a semi-hollow body electric guitar with classic Gretsch tone, perfect for blues, rock, and jazz. It features a stylish White finish and powerful Filter'Tron pickups.",
+  "category": "Electric Guitars",
+  "price": 950,
+  "stock": 10,
+  "tags": [
+    "electric guitar",
+    "Gretsch",
+    "semi-hollow",
+    "Filter'Tron pickups",
+    "vintage"
+  ],
+  "brand": "Gretsch",
+  "sku": "GTR-GRE-G5422TG-001",
+  "weight": 3.5,
+  "dimensions": [
+    {
+      "length": 102,
+      "width": 41,
+      "height": 13
+    }
+  ],
+  "warranty": "2 years limited warranty from the manufacturer",
+  "reviews": [
+    {
+      "user": "MusicLover",
+      "comment": "Great tone and sustain! Ideal for a wide range of genres, from jazz to rock.",
+      "stars": 5
+    },
+    {
+      "user": "RockFanatic",
+      "comment": "Awesome guitar with a smooth playability. The Filter'Tron pickups provide a rich and clear sound.",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://thumbs.static-thomann.de/thumb/padthumb600x600/pics/bdb/_53/535960/17205238_800.jpg",
+  "images": [
+    "https://thumbs.static-thomann.de/thumb/padthumb600x600/pics/bdb/_53/535960/17205238_800.jpg",
+    "https://sc1.musik-produktiv.com/pic-010142503l/gretsch-guitars-electromatic-g5422tg-dc-org.jpg"
+  ]
+}]
