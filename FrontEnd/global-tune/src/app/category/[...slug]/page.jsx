@@ -19,6 +19,7 @@ const loadProducts = async () => {
     title
     price
     stock
+    sku
   }}`,
     }),
   })

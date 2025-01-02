@@ -17,7 +17,7 @@ function ProductCard({ product }) {
         <p className="card-text">${product.price}</p>
         {product.stock>0?(<p className='text-success'>IN STOCK!</p>):(<p className='text-danger'>OUT OF STOCK</p>)}
         {/* TODO: fix the breadcrum for this url*/}
-        <Link href={`/product/${product.id}`} className="btn btn-primary">
+        <Link href={`/product/${product.sku}`} className="btn btn-primary">
           VIEW PRODUCT
         </Link>
       </div>

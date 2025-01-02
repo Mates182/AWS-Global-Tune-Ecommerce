@@ -2,17 +2,44 @@ import React from "react";
 import AddToCartForm from "@/components/AddToCartForm";
 import ProductImagesDisplay from "@/components/ProductImagesDisplay";
 
-// TODOs: Consume the api for our products
-const loadProducts = async (id) => {
-  const res = await fetch(`https://dummyjson.com/products/${id}`); //using dummyjson products api for placeholders
-  const data = await res.json();
-  console.log(data);
-  return data;
+// TODOs: Consume the api for our products, here we're using a local graphql api
+// Display only the products with the category
+const loadProduct = async (productId) => {
+  const res = await fetch("http://localhost:27017/graphql/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `{productBySku(sku: "${productId}") {
+    title
+    images
+    stock
+    price
+    description
+    category
+    brand
+    thumbnail
+  }}`,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      alert("Error: " + error.message);
+    });
+  const { data } = res;
+  const {productBySku} = data
+  return productBySku;
 };
 
 async function ProductPage({ params }) {
   const { productId } = await params;
-  const product = await loadProducts(productId);
+  const product = await loadProduct(productId);
   return (
     <div className="row">
       <section className="col-4">

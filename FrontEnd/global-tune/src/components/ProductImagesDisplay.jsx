@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-function ProductImagesDisplay({ images, title }) {
+function ProductImagesDisplay({ images, title}) {
   const [selectedImg, setSelectedImg] = useState(0);
   const [focusedImg, setFocusedImg] = useState(-1);
   return (
