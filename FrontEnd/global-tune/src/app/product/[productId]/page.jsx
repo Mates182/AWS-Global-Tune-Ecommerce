@@ -1,41 +1,7 @@
 import React from "react";
 import AddToCartForm from "@/components/AddToCartForm";
 import ProductImagesDisplay from "@/components/ProductImagesDisplay";
-
-// TODOs: Consume the api for our products, here we're using a local graphql api
-// Display only the products with the category
-const loadProduct = async (productId) => {
-  const res = await fetch("http://localhost:27017/graphql/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `{productBySku(sku: "${productId}") {
-    title
-    images
-    stock
-    price
-    description
-    category
-    brand
-    thumbnail
-  }}`,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      alert("Error: " + error.message);
-    });
-  const { data } = res;
-  const {productBySku} = data
-  return productBySku;
-};
+import { loadProduct } from "@/services/GraphQL/products";
 
 async function ProductPage({ params }) {
   const { productId } = await params;

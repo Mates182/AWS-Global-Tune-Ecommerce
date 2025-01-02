@@ -1,50 +1,15 @@
 import React from "react";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
+import { loadProducts, loadCategories } from "@/services/GraphQL/products";
 
-// TODOs: Consume the api for our products, here we're using a local graphql api
-// Display only the products with the category
-const loadProducts = async () => {
-  const res = await fetch("http://localhost:27017/graphql/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `{products {
-    brand
-    category
-    id
-    thumbnail
-    title
-    price
-    stock
-    sku
-  }}`,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      alert("Error: " + error.message);
-    });
-  const {data} = res
-  return data;
-};
-const loadCategories = async () => {
-  const res = await fetch("https://dummyjson.com/products/categories"); //using dummyjson products api for placeholders
-  const data = await res.json();
-  return data;
-};
+// TODO: Display only the products with the category
 // TODO: Add discounts and brands, display only x number of products
 async function CategoryPage({ params }) {
   const { slug } = await params; // url segments
   const { products } = await loadProducts();
   const categories = await loadCategories();
+  console.log(categories)
   return (
     <div className="container row">
       <h1>
@@ -66,7 +31,7 @@ async function CategoryPage({ params }) {
               key={i}
               className="list-group-item"
             >
-              {category.name}
+              {`${category.name} (${category.count})`}
             </Link>
           ))}
         </ul>
