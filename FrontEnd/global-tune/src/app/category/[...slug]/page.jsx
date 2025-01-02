@@ -9,7 +9,6 @@ async function CategoryPage({ params }) {
   const { slug } = await params; // url segments
   const { products } = await loadProducts();
   const categories = await loadCategories();
-  console.log(categories)
   return (
     <div className="container row">
       <h1>
