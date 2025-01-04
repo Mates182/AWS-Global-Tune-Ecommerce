@@ -10,8 +10,8 @@ export const getCartById = async (id) => {
 
 export const createOrUpdateCart = async (cart) => {
   const response = await fetch(`${API_BASE_URL}/cart/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(cart),
   });
   if (!response.ok) {
