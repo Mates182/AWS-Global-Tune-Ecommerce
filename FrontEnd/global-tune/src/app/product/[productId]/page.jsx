@@ -16,7 +16,6 @@ async function ProductPage({ params, searchParams }) {
         items: [{ product_id: productId, quantity: parseInt(quantity) }]
       }
       const response = await createOrUpdateCart(cart);
-      console.log(response);
     } catch (error) {
       console.log("Error adding to cart", error)
       modal = false

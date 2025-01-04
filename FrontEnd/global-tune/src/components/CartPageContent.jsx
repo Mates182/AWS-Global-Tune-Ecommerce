@@ -3,12 +3,19 @@ import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import BillingDetails from "@/components/BillingDetails";
 import { BsFillTrashFill } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
-function CartTable({ products, cart }) {
-  const isHidden = false
-  const [productsTemp, setProductsTemp] = useState(products.map(product=>{ 
-    return {...product, isHidden}
-  }));
+function CartTable({ products, cart, redirect }) {
+  const router = useRouter();
+  if (redirect) {
+    router.push("/cart");
+  }
+  const isHidden = false;
+  const [productsTemp, setProductsTemp] = useState(
+    products.map((product) => {
+      return { ...product, isHidden };
+    })
+  );
 
   if (productsTemp.length == 0) {
     return (
@@ -46,11 +53,21 @@ function CartTable({ products, cart }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    let delList = [];
+    let postList = [];
     setIsTableModified(false);
     setProductsTemp(
       productsTemp.map((product, i) => {
         let productTemp = product;
         productTemp.quantity = e.target[i * 2].value;
+        if (e.target[i * 2].min == 0) {
+          delList.push(product.id);
+        } else {
+          postList.push({
+            product_id: product.id,
+            quantity: parseInt(product.quantity),
+          });
+        }
         return productTemp;
       })
     );
@@ -60,7 +77,17 @@ function CartTable({ products, cart }) {
       ) / 100
     );
     setTotal(subtotal + shipping);
-    // TODO: send a request to change values on cart on confirm changes Link
+    router.push(
+      `/cart/?${
+        delList.length > 0
+          ? postList.length > 0
+            ? `del=${JSON.stringify(delList)}&post=${JSON.stringify(postList)}`
+            : `del=${JSON.stringify(delList)}`
+          : postList.length > 0
+          ? `post=${JSON.stringify(postList)}`
+          : ""
+      }`
+    );
   };
 
   return (
@@ -80,7 +107,10 @@ function CartTable({ products, cart }) {
             </thead>
             <tbody>
               {productsTemp.map((product, i) => (
-                <tr className={`align-middle ${product.isHidden?'d-none':''}`} key={i}>
+                <tr
+                  className={`align-middle ${product.isHidden ? "d-none" : ""}`}
+                  key={i}
+                >
                   <th scope="row">
                     <Link href={`/product/${product.id}`}>
                       <img
@@ -110,9 +140,9 @@ function CartTable({ products, cart }) {
                     <input
                       id={`product${product.id}`}
                       type="number"
-                      className="form-control"
+                      className={`form-control`}
                       defaultValue={product.quantity}
-                      min="1"
+                      min={product.isHidden ? "0" : "1"}
                       onChange={(e) => {
                         setIsTableModified(true);
                       }}
@@ -126,7 +156,7 @@ function CartTable({ products, cart }) {
                       className="btn btn-outline-danger"
                       onClick={(e) => {
                         e.preventDefault();
-                        setIsTableModified(true)
+                        setIsTableModified(true);
                         setProductsTemp(
                           productsTemp.map((productTemp, j) => {
                             if (j == i) {
