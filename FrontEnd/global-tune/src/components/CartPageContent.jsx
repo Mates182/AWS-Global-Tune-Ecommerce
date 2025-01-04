@@ -3,8 +3,30 @@ import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import BillingDetails from "@/components/BillingDetails";
 
-function CartTable({ products }) {
+function CartTable({ products, cart }) {
   const [productsTemp, setProductsTemp] = useState([...products]);
+  if (productsTemp.length == 0) {
+    return (
+      <div className="mt-3 d-flex flex-column justify-content-center">
+        <h2 className="text-center">Your cart seems to be Empty</h2>
+        <div className="m-auto">
+          <img
+            src="https://img.freepik.com/premium-photo/guitar-shopping-cart-white-background_256339-2827.jpg?w=1060"
+            alt="Empty Cart"
+            style={{ maxWidth: "444px" }}
+          />
+        </div>
+
+        <p className="mb-4 text-center">
+          But the music never stops. Explore our collection of instruments and
+          find the one that will make you feel the vibe.
+        </p>
+        <Link href="/category/products" className="btn btn-outline-success">
+          Explore instruments
+        </Link>
+      </div>
+    );
+  }
   const [focusedImg, setFocusedImg] = useState(-1);
   const [subtotal, setSubtotal] = useState(
     Math.ceil(
@@ -52,8 +74,8 @@ function CartTable({ products }) {
               </tr>
             </thead>
             <tbody>
-              {productsTemp.map((product) => (
-                <tr className="align-middle" key={product.id}>
+              {productsTemp.map((product, i) => (
+                <tr className="align-middle" key={i}>
                   <th scope="row">
                     <Link href={`/product/${product.id}`}>
                       <img
@@ -159,8 +181,7 @@ function CartTable({ products }) {
       {showBillingDetails && (
         <>
           <hr />
-          <BillingDetails id='btd'></BillingDetails>
-      
+          <BillingDetails id="btd"></BillingDetails>
         </>
       )}
     </>
