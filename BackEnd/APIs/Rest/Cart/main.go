@@ -46,6 +46,7 @@ func main() {
 	// RESTful routes
 	router.GET("cart/:id", getCartByID)
 	router.POST("cart/", postCart)
+	router.DELETE("cart/:id", deleteCart)
 
 	router.Run("0.0.0.0:8080")
 
@@ -95,4 +96,29 @@ func postCart(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, gin.H{"message": "Cart created successfully"})
 }
 
-// TODO: implement PUT, DELETE, and PATCH if needed
+// DELETE: Delete a cart or a cart item
+func deleteCart(c *gin.Context) {
+	id := c.Param("id")
+	productID := c.Query("product")
+	cart := "cart:" + id
+
+	if productID == "" {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Product ID is required"})
+		return
+	}
+
+	if client == nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Client not initialized"})
+		return
+	}
+
+	err := client.HDel(context.Background(), cart, productID).Err()
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Failed to delete product from cart", "error": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Product removed from cart successfully"})
+}
+
+// TODO: implement PUT, and PATCH if needed

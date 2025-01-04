@@ -19,3 +19,20 @@ export const createOrUpdateCart = async (cart) => {
   }
   return response.json();
 };
+
+export const deleteCartProducts = async (id, productId) => {
+  if (!id || !productId ) {
+    throw new Error("Cart ID and at least one product ID are required.");
+  }
+  const response = await fetch(`${API_BASE_URL}/cart/${id}?product=${productId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Error deleting products from cart: ${response.statusText}`
+    );
+  }
+
+  return response.json();
+};

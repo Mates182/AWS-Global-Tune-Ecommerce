@@ -2,9 +2,14 @@
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import BillingDetails from "@/components/BillingDetails";
+import { BsFillTrashFill } from "react-icons/bs";
 
 function CartTable({ products, cart }) {
-  const [productsTemp, setProductsTemp] = useState([...products]);
+  const isHidden = false
+  const [productsTemp, setProductsTemp] = useState(products.map(product=>{ 
+    return {...product, isHidden}
+  }));
+
   if (productsTemp.length == 0) {
     return (
       <div className="mt-3 d-flex flex-column justify-content-center">
@@ -75,7 +80,7 @@ function CartTable({ products, cart }) {
             </thead>
             <tbody>
               {productsTemp.map((product, i) => (
-                <tr className="align-middle" key={i}>
+                <tr className={`align-middle ${product.isHidden?'d-none':''}`} key={i}>
                   <th scope="row">
                     <Link href={`/product/${product.id}`}>
                       <img
@@ -117,17 +122,22 @@ function CartTable({ products, cart }) {
                     ${Math.ceil(product.quantity * product.price * 100) / 100}
                   </td>
                   <td>
-                    {/**
-                   // TODO: implement delete function
-                   */}
                     <button
                       className="btn btn-outline-danger"
                       onClick={(e) => {
                         e.preventDefault();
-                        alert("not implemented yet");
+                        setIsTableModified(true)
+                        setProductsTemp(
+                          productsTemp.map((productTemp, j) => {
+                            if (j == i) {
+                              productTemp.isHidden = true;
+                            }
+                            return productTemp;
+                          })
+                        );
                       }}
                     >
-                      X
+                      <BsFillTrashFill />
                     </button>
                   </td>
                 </tr>
