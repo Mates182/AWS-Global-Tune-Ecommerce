@@ -61,6 +61,7 @@ func main() {
 	router.GET("products/:id", getProductByID)
 	router.POST("products", createProduct)
 	router.DELETE("products/:id", deleteProductByID)
+	router.PATCH("products/:id", patchProductByID)
 
 	router.Run("0.0.0.0:8000")
 
@@ -172,4 +173,34 @@ func deleteProductByID(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Product deleted successfully"})
 }
 
-// TODO: implement PUT/PATCH
+func patchProductByID(c *gin.Context) {
+	id := c.Param("id")
+	var updates map[string]interface{}
+
+	if err := c.BindJSON(&updates); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+		return
+	}
+
+	if mongoCollection == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database not initialized"})
+		return
+	}
+
+	filter := bson.M{"sku": id}
+
+	update := bson.M{"$set": updates}
+
+	result, err := mongoCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update product"})
+		return
+	}
+
+	if result.MatchedCount == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Product not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Product updated successfully"})
+}
