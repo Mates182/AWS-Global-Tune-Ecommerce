@@ -28,6 +28,7 @@ func main() {
 
 	// RESTful routes
 	router.POST("login", postLogin)
+	router.POST("logout", postLogout)
 
 	router.Run("localhost:8082")
 }
@@ -65,4 +66,25 @@ func createToken(email string) (string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(jwtKey)
+}
+
+func postLogout(c *gin.Context) {
+	tokenString, err := c.Cookie("myTokenName")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "No cookie found"})
+		return
+	}
+
+	claims := &jwt.RegisteredClaims{}
+	_, err = jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid token"})
+		return
+	}
+
+	c.SetCookie("myTokenName", "", 0, "/", "localhost", false, true)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
