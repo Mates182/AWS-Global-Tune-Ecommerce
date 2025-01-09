@@ -48,7 +48,18 @@ func postLogin(c *gin.Context) {
 			return
 		}
 
-		c.SetCookie("token", token, 3600, "/", "localhost", false, true)
+		cookie := &http.Cookie{
+			Name:     "token",
+			Value:    token,
+			Path:     "/",
+			Domain:   "localhost",
+			HttpOnly: true,
+			Secure:   false, // Change to true on production
+			MaxAge:   3600,
+			SameSite: http.SameSiteLaxMode,
+		}
+
+		http.SetCookie(c.Writer, cookie)
 
 		c.IndentedJSON(http.StatusOK, gin.H{"message": "Login successful"})
 		return
@@ -69,7 +80,7 @@ func createToken(email string) (string, error) {
 }
 
 func postLogout(c *gin.Context) {
-	tokenString, err := c.Cookie("myTokenName")
+	tokenString, err := c.Cookie("token")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "No cookie found"})
 		return
@@ -84,7 +95,18 @@ func postLogout(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("myTokenName", "", 0, "/", "localhost", false, true)
+	cookie := &http.Cookie{
+		Name:     "token",
+		Value:    "",
+		Path:     "/",
+		Domain:   "localhost",
+		HttpOnly: true,
+		Secure:   false,
+		MaxAge:   -1,
+		SameSite: http.SameSiteLaxMode,
+	}
+
+	http.SetCookie(c.Writer, cookie)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }

@@ -6,9 +6,24 @@ export const loginAuth = async (body) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
+    credentials: "include",
   });
   if (!response.ok) {
     throw new Error(`Error on auth: ${response.statusText}`);
+  }
+  return response.json();
+};
+
+export const logout = async () => {
+  const response = await fetch("http://localhost:8082/logout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error(`Error on logout: ${response.statusText}`);
   }
   return response.json();
 };
