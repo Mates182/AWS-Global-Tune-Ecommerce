@@ -3,7 +3,7 @@ name: Deploy Frontend service
 on:
   push:
     branches:
-      - dev
+      - test
 jobs:
   push_to_registry:
     name: Push Docker Images to Docker Hub
