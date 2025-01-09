@@ -1,7 +1,7 @@
 import React from "react";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
-import { loadProducts, loadCategories } from "@/services/GraphQL/products";
+import { loadProducts, loadCategories } from "@/controllers/products";
 
 // TODO: Display only the products with the category
 // TODO: Add discounts and brands, display only x number of products

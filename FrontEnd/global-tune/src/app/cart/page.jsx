@@ -5,7 +5,7 @@ import {
   createOrUpdateCart,
   deleteCartProducts,
 } from "@/services/Rest/cart";
-import { loadProduct } from "@/services/GraphQL/products";
+import { loadProduct } from "@/controllers/products";
 
 async function CartPage({ searchParams }) {
   const { del, post } = await searchParams;

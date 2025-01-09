@@ -1,7 +1,7 @@
 import React from "react";
 import AddToCartForm from "@/components/AddToCartForm";
 import ProductImagesDisplay from "@/components/ProductImagesDisplay";
-import { loadProduct } from "@/services/GraphQL/products";
+import { loadProduct } from "@/controllers/products";
 import {createOrUpdateCart} from '@/services/Rest/cart'
 import Link from "next/link";
 
