@@ -1,8 +1,12 @@
-# Products GraphQL API - Python
+# Get Product By Id Service
+The Get Product By Id Service is a GraphQL API built with Python using FastAPI and Strawberry to fetch a product by its id within the Products Domain of the Global Tune eCommerce platform.
 
-A GraphQL API built with Python using FastAPI and Strawberry to fetch the products.  
+## Architecture
+<p align="center">
+    <img alt="Get Product By Id Service architecture diagram" src="/assets/graphql-documentdb.webp"/>
+</p>
 
-## 🚀 Getting Started (To run locally)
+## Getting Started for Local Testing
 
 ### 🌟 Create a Virtual Environment  
 - **For Windows**:  
@@ -32,8 +36,7 @@ python main.py
 ```
 
 The API will be available at:  
-- **Homepage**: [http://localhost:27017](http://localhost:27017)  
-- **GraphQL Endpoint**: [http://localhost:27017/graphql](http://localhost:27017/graphql)  
+- **GraphQL Endpoint**: [http://localhost/graphql](http://localhost:27017/graphql)  
 
 ## 🔍 Example Usage  
 
@@ -43,7 +46,7 @@ To fetch the list of products from the API, you can use a query like this in a G
 
 ```graphql
 query {
-  products {
+  productBySku(sku: productId) {
     name
     price
     description
@@ -51,7 +54,7 @@ query {
 }
 ```
 
-This query will retrieve the `name`, `price`, and `description` of all available products.
+This query will retrieve the `name`, `price`, and `description` of the product with the id `productId`.
 
 ### ⛔ Deactivate the Virtual Environment  
 When done, you can deactivate the virtual environment:  
@@ -60,6 +63,3 @@ deactivate
 ```
 
 ---
-
-# TODOs
-- Implement other necessary queries when needed

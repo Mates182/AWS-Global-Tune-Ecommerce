@@ -14,12 +14,6 @@ db = client["globaltune_products"]
 products_collection = db["products"]
 
 @strawberry.type
-class Dimensions:
-    length: float
-    width: float
-    height: float
-
-@strawberry.type
 class Product:
     id: str
     title: str
@@ -63,32 +57,9 @@ class Query:
             for product in products_data
         ]
         return products
-    @strawberry.field
-    def product_by_sku(self, sku: str) -> Product:
-        # Query MongoDB for a product with a specific SKU
-        product_data = products_collection.find_one({"sku": sku})  # Find the product by SKU
-        if product_data:
-            # Convert MongoDB document to Product object
-            return Product(
-                id=str(product_data["_id"]),
-                title=product_data["title"],
-                description=product_data["description"],
-                category=product_data["category"],
-                price=product_data["price"],
-                stock=product_data["stock"],
-                tags=product_data["tags"],
-                brand=product_data["brand"],
-                sku=product_data["sku"],
-                weight=product_data["weight"],
-                warranty=product_data["warranty"],
-                thumbnail=product_data["thumbnail"],
-                images=product_data["images"]
-            )
-        return None  # Return None if no product found
 
 schema = strawberry.Schema(query=Query)
 app = FastAPI()
-
 
 app.add_middleware(
     CORSMiddleware,
