@@ -1,0 +1,160 @@
+services:
+  # Products domain microservices
+  products-db:
+    build:
+      context: ../BackEnd/DataBases/products
+      dockerfile: Dockerfile
+    container_name: products-db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      - my_network
+
+  create-product:
+    build:
+      context: ../BackEnd/Domains/Products/CreateProduct
+      dockerfile: Dockerfile
+    ports:
+      - "8089:80"
+    environment:
+      - MONGO_URI=mongodb://user:password@products-db:27017
+    depends_on:
+      - products-db
+    networks:
+      - my_network
+
+  delete-product:
+    build:
+      context: ../BackEnd/Domains/Products/DeleteProduct
+      dockerfile: Dockerfile
+    ports:
+      - "8082:80"
+    environment:
+      - MONGO_URI=mongodb://user:password@products-db:27017
+    depends_on:
+      - products-db
+    networks:
+      - my_network
+
+  edit-product:
+    build:
+      context: ../BackEnd/Domains/Products/EditProduct
+      dockerfile: Dockerfile
+    ports:
+      - "8083:80"
+    environment:
+      - MONGO_URI=mongodb://user:password@products-db:27017
+    depends_on:
+      - products-db
+    networks:
+      - my_network
+
+  get-all-products:
+    build:
+      context: ../BackEnd/Domains/Products/GetAllProducts
+      dockerfile: Dockerfile
+    ports:
+      - "8084:27017"
+    environment:
+      - MONGO_URI=mongodb://user:password@products-db:27017
+    depends_on:
+      - products-db
+    networks:
+      - my_network
+
+  get-product-by-id:
+    build:
+      context: ../BackEnd/Domains/Products/GetProductById
+      dockerfile: Dockerfile
+    ports:
+      - "8085:27017"
+    environment:
+      - MONGO_URI=mongodb://user:password@products-db:27017
+    depends_on:
+      - products-db
+    networks:
+      - my_network
+
+  # Cart domain microservices
+  get-cart-by-id:
+    build:
+      context: ../BackEnd/Domains/Cart/GetCartById
+      dockerfile: Dockerfile
+    ports:
+      - "8086:80"
+    environment:
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=localDevPassword
+    depends_on:
+      - redis
+    networks:
+      - my_network
+
+  set-cart:
+    build:
+      context: ../BackEnd/Domains/Cart/SetCart
+      dockerfile: Dockerfile
+    ports:
+      - "8087:80"
+    environment:
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=localDevPassword
+    depends_on:
+      - redis
+    networks:
+      - my_network
+
+  delete-cart:
+    build:
+      context: ../BackEnd/Domains/Cart/DeleteCart
+      dockerfile: Dockerfile
+    ports:
+      - "8088:80"
+    environment:
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=localDevPassword
+    depends_on:
+      - redis
+    networks:
+      - my_network
+
+  redis:
+    build:
+      context: ../BackEnd/DataBases/cart
+      dockerfile: Dockerfile
+    container_name: redis
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    volumes:
+      - ../Dev/redis.conf:/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    networks:
+      - my_network
+
+  # Local API Gateway
+  api-gateway:
+    image: nginx:latest
+    container_name: api-gateway
+    volumes:
+      - ../Dev/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:8080"
+    depends_on:
+      - create-product
+      - delete-product
+      - edit-product
+      - get-all-products
+      - get-product-by-id
+      - get-cart-by-id
+      - set-cart
+      - delete-cart
+      - redis
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
