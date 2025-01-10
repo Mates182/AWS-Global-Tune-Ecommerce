@@ -1,10 +1,12 @@
-# Shopping Cart REST API - Golang
+# Get Cart By Id Service
 
-A RESTful API for the shopping cart service written in Golang. The service uses Redis as a temporary database, with plans to migrate to DynamoDB.
+The Get Cart By Id Service is a RESTful API developed in Go (Golang) that facilitates the retrievement of shopping carts items within the Cart Domain of the Global Tune eCommerce platform. The service uses Redis as a temporary database, with plans to migrate to DynamoDB.
 
-## Features
-- Retrieve a shopping cart by ID.
-- Create or update a shopping cart.
+## Architecture
+<p align="center">
+    <img alt="Get Cart By Id Service architecture diagram" src="/assets/rest-cart-arch.webp"/>
+</p>
+
 
 ## Getting Started for Local testing
 
@@ -63,7 +65,7 @@ docker run -e REDIS_ADDR="endpoint:port" -e REDIS_PASSWORD="password" -p 8080:80
 ```
 Replace `endpoint:port` and `password` with your Redis server details.
 
-## API Endpoints
+## API Endpoint
 
 ### GET /cart/:id
 Retrieve the shopping cart by its ID.
@@ -85,50 +87,7 @@ curl -X GET http://localhost:8080/cart/123
   "product_2": "3"
 }
 ```
-
-### POST /cart/
-Create or update a shopping cart.
-- **Request Body:**
-```json
-{
-  "id": "123",
-  "items": [
-    { "product_id": "product_1", "quantity": 2 },
-    { "product_id": "product_2", "quantity": 3 }
-  ]
-}
-```
-- **Response:**
-  - 201: Cart created successfully.
-  - 400: Invalid request payload.
-  - 500: Internal server error.
-
-**Example Request:**
-```bash
-curl -X POST http://localhost:8080/cart/ \
--H "Content-Type: application/json" \
--d '{
-  "id": "123",
-  "items": [
-    { "product_id": "product_1", "quantity": 2 },
-    { "product_id": "product_2", "quantity": 3 }
-  ]
-}'
-```
-**Example Response:**
-```json
-{
-  "message": "Cart created successfully"
-}
-```
-
 ## Notes
 - Ensure Redis is running and accessible before starting the application.
 - In production, use `gin.SetMode(gin.ReleaseMode)` to enable release mode for better performance.
 - For security, avoid trusting all proxies; configure trusted proxies explicitly.
-
-## Future Improvements
-- Migrate the database to DynamoDB for scalability.
-- Add authentication and authorization.
-- Enhance error handling and logging.
-- Add other enpoints when needed

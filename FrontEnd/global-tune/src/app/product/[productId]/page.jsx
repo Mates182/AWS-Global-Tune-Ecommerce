@@ -2,7 +2,7 @@ import React from "react";
 import AddToCartForm from "@/components/AddToCartForm";
 import ProductImagesDisplay from "@/components/ProductImagesDisplay";
 import { loadProduct } from "@/controllers/products";
-import {createOrUpdateCart} from '@/services/Rest/cart'
+import {createOrUpdateCart} from '@/controllers/cart'
 import Link from "next/link";
 
 async function ProductPage({ params, searchParams }) {

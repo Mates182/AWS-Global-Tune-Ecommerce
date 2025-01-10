@@ -93,7 +93,7 @@ export const loadProduct = async (productId) => {
       return response.json();
     })
     .catch((error) => {
-      alert("Error: " + error.message);
+      console.log("Error: " + error.message);
     });
   const { data } = res;
   const { productBySku } = data;

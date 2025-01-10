@@ -44,59 +44,14 @@ func main() {
 
 	router := gin.Default()
 	// RESTful routes
-	router.GET("cart/:id", getCartByID)
-	router.POST("cart/", postCart)
 	router.DELETE("cart/:id", deleteCart)
 
-	router.Run("0.0.0.0:8080")
+	router.Run("0.0.0.0:80")
 
-}
-
-// GET: Get cart by ID
-func getCartByID(c *gin.Context) {
-	id := c.Param("id")
-	cart := "cart:" + id
-	if client == nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Client not initialized"})
-		return
-	}
-	val, err := client.HGetAll(context.Background(), cart).Result()
-	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Cart not found"})
-		return
-	}
-	if len(val) == 0 {
-		c.IndentedJSON(http.StatusOK, gin.H{"message": "Cart is empty"})
-		return
-	}
-	c.IndentedJSON(http.StatusOK, val)
-
-}
-
-// POST: Add a new cart
-func postCart(c *gin.Context) {
-	var cart Cart
-	if err := c.BindJSON(&cart); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Invalid request payload"})
-		return
-	}
-	if client == nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Redis client not initialized"})
-		return
-	}
-
-	cartKey := "cart:" + cart.ID
-	for _, item := range cart.Items {
-		err := client.HSet(context.Background(), cartKey, item.ProductID, item.Quantity).Err()
-		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Failed to add item to cart"})
-			return
-		}
-	}
-	c.IndentedJSON(http.StatusCreated, gin.H{"message": "Cart created successfully"})
 }
 
 // DELETE: Delete a cart or a cart item
+// TODO: Delete the cart if empty, delete multiple items
 func deleteCart(c *gin.Context) {
 	id := c.Param("id")
 	productID := c.Query("product")
@@ -120,5 +75,3 @@ func deleteCart(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Product removed from cart successfully"})
 }
-
-// TODO: implement PUT, and PATCH if needed

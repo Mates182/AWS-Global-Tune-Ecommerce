@@ -4,7 +4,7 @@ import {
   getCartById,
   createOrUpdateCart,
   deleteCartProducts,
-} from "@/services/Rest/cart";
+} from "@/controllers/cart";
 import { loadProduct } from "@/controllers/products";
 
 async function CartPage({ searchParams }) {
