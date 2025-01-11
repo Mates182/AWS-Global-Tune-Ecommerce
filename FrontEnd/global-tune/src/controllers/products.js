@@ -1,7 +1,7 @@
 const PRODUCTS_ENDPOINT = process.env.PRODUCTS_ENDPOINT;
 
 export const loadProducts = async () => {
-  const res = await fetch(`${PRODUCTS_ENDPOINT}/all/graphql`, {
+  const res = await fetch(`${PRODUCTS_ENDPOINT}/all/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export const loadProducts = async () => {
 };
 
 export const loadCategories = async () => {
-  const res = await fetch(`${PRODUCTS_ENDPOINT}/all/graphql`, {
+  const res = await fetch(`${PRODUCTS_ENDPOINT}/all/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export const loadCategories = async () => {
 };
 
 export const loadProduct = async (productId) => {
-  const res = await fetch(`${PRODUCTS_ENDPOINT}/id/graphql`, {
+  const res = await fetch(`${PRODUCTS_ENDPOINT}/id/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
