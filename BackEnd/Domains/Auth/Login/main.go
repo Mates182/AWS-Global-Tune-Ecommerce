@@ -16,6 +16,12 @@ type Login struct {
 
 var jwtKey = []byte("my_secret_key")
 
+type Claims struct {
+	jwt.RegisteredClaims
+	UserID string `json:"user_id"`
+	Role   string `json:"role"`
+}
+
 func main() {
 	router := gin.Default()
 
@@ -38,10 +44,13 @@ func postLogin(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Invalid request body"})
 		return
 	}
-
+	// TODO: Validate with real data
 	if login.Email == "admin@admin" && login.Password == "admin" {
 
-		token, err := createToken(login.Email)
+		userID := "12345"
+		role := "admin"
+
+		token, err := createToken(login.Email, userID, role)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Could not generate token"})
 			return
@@ -54,7 +63,7 @@ func postLogin(c *gin.Context) {
 			Domain:   "localhost",
 			HttpOnly: true,
 			Secure:   false, // Change to true on production
-			MaxAge:   3600,
+			MaxAge:   1,
 			SameSite: http.SameSiteLaxMode,
 		}
 
@@ -67,12 +76,15 @@ func postLogin(c *gin.Context) {
 	c.IndentedJSON(http.StatusUnauthorized, gin.H{"message": "Invalid credentials"})
 }
 
-func createToken(email string) (string, error) {
-
-	claims := &jwt.RegisteredClaims{
-		Subject:   email,
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
-		IssuedAt:  jwt.NewNumericDate(time.Now()),
+func createToken(email, userID, role string) (string, error) {
+	claims := &Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject:   email,
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+		},
+		UserID: userID,
+		Role:   role,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(jwtKey)
