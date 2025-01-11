@@ -1,6 +1,8 @@
 use jsonwebtoken::{decode, DecodingKey, Validation, errors::ErrorKind};
 use serde::{Deserialize, Serialize};
 use tonic::{transport::Server, Request, Response, Status};
+use dotenv::dotenv;
+use std::env;
 
 pub mod auth {
     tonic::include_proto!("auth");
@@ -10,8 +12,6 @@ use auth::{
     auth_service_server::{AuthService, AuthServiceServer},
     ValidateTokenRequest, ValidateTokenResponse,
 };
-
-const SECRET_KEY: &str = "my_secret_key"; // Change in production
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Claims {
@@ -34,10 +34,10 @@ impl AuthService for AuthServiceImpl {
 
         let mut validation = Validation::default();
         validation.validate_exp = true;
-
+        let secret_key = env::var("SECRET_KEY").expect("SECRET_KEY has to be configured");
         let token_data = decode::<Claims>(
             &req.token,
-            &DecodingKey::from_secret(SECRET_KEY.as_ref()),
+            &DecodingKey::from_secret(secret_key.as_ref()),
             &validation,
         );
 
@@ -78,7 +78,9 @@ impl AuthService for AuthServiceImpl {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "[::1]:50051".parse()?;
+    dotenv().ok();
+    
+    let addr = "0.0.0.0:80".parse()?;
     let auth_service = AuthServiceImpl::default();
 
     println!("AuthService runnin on port {}", addr);

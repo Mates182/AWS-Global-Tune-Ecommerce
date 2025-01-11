@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
 type Login struct {
@@ -13,9 +16,14 @@ type Login struct {
 	Password string `json:"password"`
 }
 
-var jwtKey = []byte("my_secret_key")
+var jwtKey []byte
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file, ignore if is on docker")
+	}
+	jwtKey = []byte(os.Getenv("REDIS_ADDR"))
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -28,7 +36,7 @@ func main() {
 	// RESTful routes
 	router.POST("logout", postLogout)
 
-	router.Run("localhost:8082")
+	router.Run("0.0.0.0:80")
 }
 
 func postLogout(c *gin.Context) {
