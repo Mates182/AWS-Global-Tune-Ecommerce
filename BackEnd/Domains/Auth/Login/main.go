@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Error loading .env file, ignore if is on docker")
 	}
-	jwtKey = []byte(os.Getenv("REDIS_ADDR"))
+	jwtKey = []byte(os.Getenv("SECRET_KEY"))
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
