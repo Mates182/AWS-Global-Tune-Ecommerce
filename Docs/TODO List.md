@@ -1,0 +1,52 @@
+# To-Do List - Final Project
+
+## Theoretical
+- [ ] Documentation  
+- [ ] Architecture (High-level and Low-level Diagrams)  
+- [ ] Use Cases  
+- [ ] Flowchart  
+- [ ] Screenshots or Videos Detailing How It Works  
+
+## Practical
+- [ ] Implement at least 20 microservices using:  
+  - [x] REST API    (8)
+  - [x] GraphQL     (2) 
+  - [x] RPC         (1)
+  - [x] SOAP        (1)
+  - [ ] Total (12)
+- [ ] Create a client or frontend utilizing all microservices  
+- [ ] Implement at least 10 databases:  
+  - [ ] Relational  
+  - [x] Non-relational  
+  - [ ] Cache  
+  - [ ] Graph  
+  - [ ] Deploy on any cloud provider  
+- [ ] Use at least 3 operating systems  
+- [x] Develop with at least 4 backend languages:  
+  - [x] JavaScript  
+  - [x] Python  
+  - [x] Go  
+  - [x] Rust
+  - [x] C#
+- [ ] Implement security measures:  
+  - [x] JWT  
+  - [ ] Encryption  
+  - [x] CORS  
+- [ ] DevOps:  
+  - [ ] Code Reviewer  
+  - [ ] Pull Request Workflow  
+- [ ] Load Balancer  
+- [ ] Auto Scaling Group  
+- [ ] API Gateway  
+- [ ] Event-driven Architecture (e.g., SNS, SQS, or Kinesis on AWS)  
+- [ ] Apply at least 4 design principles:  
+  - [ ] SOLID  
+  - [ ] KISS  
+  - [ ] DRY  
+  - [ ] YAGNI 
+- [ ] Set up monitoring and alerting:  
+  - [ ] Grafana  
+  - [ ] Prometheus  
+  - [ ] Kibana
+- [ ] Document endpoints with Swagger  
+- [ ] Create a Risk Plan (e.g., Backup Strategy)  
