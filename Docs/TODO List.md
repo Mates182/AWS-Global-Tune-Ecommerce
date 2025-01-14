@@ -1,52 +1,24 @@
 # To-Do List - Final Project
 
-## Theoretical
-- [ ] Documentation  
-- [ ] Architecture (High-level and Low-level Diagrams)  
-- [ ] Use Cases  
-- [ ] Flowchart  
-- [ ] Screenshots or Videos Detailing How It Works  
-
-## Practical
-- [ ] Implement at least 20 microservices using:  
-  - [x] REST API    (8)
-  - [x] GraphQL     (2) 
-  - [x] RPC         (1)
-  - [x] SOAP        (1)
-  - [ ] Total (12)
-- [ ] Create a client or frontend utilizing all microservices  
-- [ ] Implement at least 10 databases:  
-  - [ ] Relational  
-  - [x] Non-relational  
-  - [ ] Cache  
-  - [ ] Graph  
-  - [ ] Deploy on any cloud provider  
-- [ ] Use at least 3 operating systems  
-- [x] Develop with at least 4 backend languages:  
-  - [x] JavaScript  
-  - [x] Python  
-  - [x] Go  
-  - [x] Rust
-  - [x] C#
-- [ ] Implement security measures:  
-  - [x] JWT  
-  - [ ] Encryption  
-  - [x] CORS  
-- [ ] DevOps:  
-  - [ ] Code Reviewer  
-  - [ ] Pull Request Workflow  
-- [ ] Load Balancer  
-- [ ] Auto Scaling Group  
-- [ ] API Gateway  
-- [ ] Event-driven Architecture (e.g., SNS, SQS, or Kinesis on AWS)  
-- [ ] Apply at least 4 design principles:  
-  - [ ] SOLID  
-  - [ ] KISS  
-  - [ ] DRY  
-  - [ ] YAGNI 
-- [ ] Set up monitoring and alerting:  
-  - [ ] Grafana  
-  - [ ] Prometheus  
-  - [ ] Kibana
-- [ ] Document endpoints with Swagger  
-- [ ] Create a Risk Plan (e.g., Backup Strategy)  
+| Task                               | Assigned To                                                                 | Current Status | Finished                                                                                                                                     |
+|------------------------------------|-----------------------------------------------------------------------------|----------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| Documentation      | [not assigned](#)       | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Architecture (High-level and Low-level Diagrams) | [not assigned](#)    | Pending    | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Use Cases                          | [not assigned](#)           | Pending     | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Flowchart                          | [not assigned](#)           | Pending   | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Screenshots or Videos Detailing How It Works | [not assigned](#)      | Pending    | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Implement 20 microservices         | [Mateo Pillajo](https://github.com/Mates182)   | In Progress    | <ul><li>- [x] REST API (8)</li><li>- [x] GraphQL (2)</li><li>- [x] RPC (1)</li><li>- [x] SOAP (1)</li><li>- [ ] Total (12)</li></ul>          |
+| Create a client or frontend        | [Mateo Pillajo](https://github.com/Mates182)   | In Progress        | <ul><li>- [x] Frontend</li><li>- [ ] Implement all services</li></ul>                                                                                                              |
+| Implement 10 databases             | <ul><li>[Mateo Pillajo](https://github.com/Mates182)</li><li>[Christian Tapia](https://github.com/ChristianRTD)</li></ul> | Pending        | <ul><li>- [ ] Relational</li><li>- [x] Non-relational</li><li>- [ ] Cache</li><li>- [ ] Graph</li><li>- [ ] Deploy on any cloud provider</li></ul> |
+| Use 3 operating systems            | [not assigned](#) | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Develop with 4 backend languages   | [Mateo Pillajo](https://github.com/Mates182)   | Completed      | <ul><li>- [x] JavaScript</li><li>- [x] Python</li><li>- [x] Go</li><li>- [x] Rust</li><li>- [x] C#</li></ul>                                 |
+| Implement security measures        | [Mateo Pillajo](https://github.com/Mates182)    | In Progress    | <ul><li>- [x] JWT</li><li>- [ ] Encryption</li><li>- [x] CORS</li></ul>                                                                      |
+| DevOps                             | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Code Reviewer</li><li>- [ ] Pull Request Workflow</li></ul>                                                                    |
+| Load Balancer                      | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Auto Scaling Group                 | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| API Gateway                        | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Event-driven Architecture          | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Apply 4 design principles          | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] SOLID</li><li>- [ ] KISS</li><li>- [ ] DRY</li><li>- [ ] YAGNI</li></ul>                                                       |
+| Set up monitoring and alerting     | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Grafana</li><li>- [ ] Prometheus</li><li>- [ ] Kibana</li></ul>                                                                |
+| Document endpoints with Swagger    | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
+| Create a Risk Plan                 | [not assigned](#)                                                          | Pending        | <ul><li>- [ ] Pending</li></ul>                                                                                                              |
