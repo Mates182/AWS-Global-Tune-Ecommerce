@@ -3,15 +3,21 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"products-rest-api/auth"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"google.golang.org/grpc"
 )
 
 type Product struct {
@@ -57,7 +63,15 @@ func main() {
 	mongoCollection = client.Database("globaltune_products").Collection("products")
 
 	router := gin.Default()
-	router.DELETE("products/:id", deleteProductByID)
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://0.0.0.0:3000"},
+		AllowMethods:     []string{"POST"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
+
+	router.DELETE("delete/:id", deleteProductByID)
 
 	router.Run("0.0.0.0:80")
 
@@ -68,7 +82,40 @@ func deleteProductByID(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Client not initialized"})
 		return
 	}
-	// TODO: authenticate admin rights
+
+	endpoint := os.Getenv("AUTH_SERVICE_URL")
+	rpcConn, err := grpc.NewClient(endpoint, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("Failed to connect to server: %v", err)
+	}
+	defer rpcConn.Close()
+
+	authClient := auth.NewAuthServiceClient(rpcConn)
+	token, err := c.Cookie("token")
+	if err != nil {
+		c.IndentedJSON(http.StatusUnauthorized, gin.H{"message": "Missing or invalid token"})
+		return
+	}
+	fmt.Println(token)
+	req := &auth.ValidateTokenRequest{
+		Token:        token,
+		RequiredRole: "admin",
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := authClient.ValidateToken(ctx, req)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Error validating token"})
+		fmt.Println(err)
+		return
+	}
+
+	if !res.Valid {
+		c.IndentedJSON(http.StatusUnauthorized, gin.H{"message": "Invalid token or role"})
+		return
+	}
 
 	sku := c.Param("id")
 	if sku == "" {
