@@ -2,7 +2,11 @@ import React from "react";
 import AddToCartForm from "@/components/AddToCartForm";
 import ProductImagesDisplay from "@/components/ProductImagesDisplay";
 import { loadProduct } from "@/controllers/products";
-import {createOrUpdateCart} from '@/controllers/cart'
+import { createOrUpdateCart } from "@/controllers/cart";
+
+import { CartDAO } from "@/DAOs/CartDAO.js";
+import { CartDTO } from "@/DTOs/CartDTO.js";
+
 import Link from "next/link";
 
 async function ProductPage({ params, searchParams }) {
@@ -11,14 +15,14 @@ async function ProductPage({ params, searchParams }) {
   let modal = quantity !== undefined;
   if (modal) {
     try {
-      const cart = {
+      const cart = new CartDTO({
         id: "1",
-        items: [{ product_id: productId, quantity: parseInt(quantity) }]
-      }
-      const response = await createOrUpdateCart(cart);
+        items: [{ product_id: productId, quantity: parseInt(quantity) }],
+      });
+      const response = await CartDAO.createOrUpdateCart(cart);
     } catch (error) {
-      console.log("Error adding to cart", error)
-      modal = false
+      console.log("Error adding to cart", error);
+      modal = false;
     }
   }
   const product = await loadProduct(productId);
@@ -47,7 +51,10 @@ async function ProductPage({ params, searchParams }) {
         {product.stock > 0 ? (
           <>
             <h3 className="text-success">{product.stock} IN STOCK!</h3>
-            <AddToCartForm product={product} productId={productId}></AddToCartForm>
+            <AddToCartForm
+              product={product}
+              productId={productId}
+            ></AddToCartForm>
           </>
         ) : (
           <h3 className="text-danger">OUT OF STOCK</h3>
