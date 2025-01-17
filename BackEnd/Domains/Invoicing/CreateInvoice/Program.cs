@@ -11,6 +11,7 @@ namespace CreateInvoice
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddSoapCore();
             builder.Services.AddScoped<ISoapService, SoapService>();
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
