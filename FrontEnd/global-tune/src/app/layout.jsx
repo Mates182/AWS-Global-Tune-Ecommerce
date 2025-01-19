@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -19,9 +18,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <header>
-          <Navbar></Navbar>
-        </header>
         <main className="container" style={{height: '1000px'}}>
           {children}
         </main>
