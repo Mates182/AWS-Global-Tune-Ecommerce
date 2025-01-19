@@ -1,6 +1,6 @@
 export const loginAuth = async (body) => {
   console.log(JSON.stringify(body));
-  const response = await fetch("http://localhost:8082/login", {
+  const response = await fetch("http://localhost:8088/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -15,7 +15,7 @@ export const loginAuth = async (body) => {
 };
 
 export const logout = async () => {
-  const response = await fetch("http://localhost:8082/logout", {
+  const response = await fetch("http://localhost:8087/logout", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
