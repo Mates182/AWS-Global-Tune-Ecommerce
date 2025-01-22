@@ -22,7 +22,7 @@ async function CartPage({ searchParams }) {
   const delList = del ? JSON.parse(del) : [];
   await Promise.all(
     delList.map(async (element) => {
-      await CartDAO.deleteCartProduct(1, element);
+      await CartDAO.deleteCartItem(1, element);
     })
   );
   // TODO: validate if user is logged in, use discounts and shippings, here we're using a test cart

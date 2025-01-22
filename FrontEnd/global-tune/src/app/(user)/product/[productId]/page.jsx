@@ -2,7 +2,6 @@ import React from "react";
 import AddToCartForm from "@/components/AddToCartForm";
 import ProductImagesDisplay from "@/components/ProductImagesDisplay";
 import { loadProduct } from "@/controllers/products";
-import { createOrUpdateCart } from "@/controllers/cart";
 
 import { CartDAO } from "@/DAOs/CartDAO.js";
 import { CartDTO } from "@/DTOs/CartDTO.js";
