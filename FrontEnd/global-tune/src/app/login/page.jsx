@@ -97,7 +97,6 @@ function LoginPage() {
                           <div className="pt-1 mb-4">
                             <button
                               className="btn btn-dark btn-lg btn-block"
-                              type="submit"
                             >
                               Login
                             </button>
