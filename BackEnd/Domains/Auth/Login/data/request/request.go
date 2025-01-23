@@ -1,6 +1,6 @@
-package models
+package request
 
-type Login struct {
+type Request struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }

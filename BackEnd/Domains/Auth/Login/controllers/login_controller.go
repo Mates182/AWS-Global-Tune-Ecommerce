@@ -3,16 +3,17 @@ package controllers
 import (
 	"net/http"
 
-	"login-service/models"
+	"login-service/data/request"
+	"login-service/data/response"
 	"login-service/secrets"
 
 	"github.com/gin-gonic/gin"
 )
 
 func PostLogin(c *gin.Context) {
-	var login models.Login
+	var login request.Request
 	if err := c.BindJSON(&login); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Invalid request body"})
+		c.IndentedJSON(http.StatusBadRequest, response.Response{Message: "Invalid request body"})
 		return
 	}
 	// TODO: Validate with real data
@@ -23,7 +24,7 @@ func PostLogin(c *gin.Context) {
 		jwtKey := secrets.GetJWTKey()
 		token, err := CreateToken(login.Email, userID, role, jwtKey)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Could not generate token"})
+			c.IndentedJSON(http.StatusInternalServerError, response.Response{Message: "Could not generate token"})
 			return
 		}
 
@@ -40,9 +41,9 @@ func PostLogin(c *gin.Context) {
 
 		http.SetCookie(c.Writer, cookie)
 
-		c.IndentedJSON(http.StatusOK, gin.H{"message": "Login successful"})
+		c.IndentedJSON(http.StatusOK, response.Response{Message: "Login successful"})
 		return
 	}
 
-	c.IndentedJSON(http.StatusUnauthorized, gin.H{"message": "Invalid credentials"})
+	c.IndentedJSON(http.StatusUnauthorized, response.Response{Message: "Invalid credentials"})
 }
