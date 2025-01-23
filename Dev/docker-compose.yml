@@ -2,7 +2,7 @@ services:
   # Products domain microservices
   products-db:
     build:
-      context: ../BackEnd/DataBases/products
+      context: ../BackEnd/DataBases/Products
       dockerfile: Dockerfile
     container_name: products-db
     ports:
@@ -20,6 +20,8 @@ services:
     environment:
       - MONGO_URI=mongodb://user:password@products-db:27017
       - AUTH_SERVICE_URL=role-auth:80
+    ports:
+      - "8090:80"
     depends_on:
       - products-db
       - role-auth
@@ -113,12 +115,12 @@ services:
 
   redis:
     build:
-      context: ../BackEnd/DataBases/cart
+      context: ../BackEnd/DataBases/Cart
       dockerfile: Dockerfile
     container_name: redis
     command: ["redis-server", "/etc/redis/redis.conf"]
     volumes:
-      - ../Dev/redis.conf:/etc/redis/redis.conf
+      - ./redis.conf:/etc/redis/redis.conf
     ports:
       - "6379:6379"
     networks:
@@ -140,6 +142,8 @@ services:
       - my_network
     environment:
       - SECRET_KEY=my_secret_key
+    ports:
+      - "8088:80"
 
   logout:
     build:
@@ -149,6 +153,8 @@ services:
       - my_network
     environment:
       - SECRET_KEY=my_secret_key
+    ports:
+      - "8087:80"
 
   role-auth:
     build:
@@ -183,22 +189,22 @@ services:
       - login
       - logout
       - role-auth
-      - sqlserver-sales
+      - invoice
     networks:
       - my_network
 
-  # Sales
-  sqlserver-sales:
+  # Invoice
+  invoice-db:
     image: mcr.microsoft.com/mssql/server
-    container_name: sqlserver-sales
+    container_name: invoice-db
     ports:
       - "1433:1433"
     environment:
       SA_PASSWORD: yourStrong#Password123
       ACCEPT_EULA: "Y"
     volumes:
-      - sqlserver-data:/var/opt/mssql
-      - ./SQLQuery.sql:/SQLQuery.sql
+      - invoice-data:/var/opt/mssql
+      - ./Backend/DataBases/Invoice/SQLQuery.sql:/SQLQuery.sql
     networks:
       - my_network
 
@@ -207,16 +213,33 @@ services:
       context: ../BackEnd/Domains/Invoicing/CreateInvoice
       dockerfile: Dockerfile
     environment:
-      - connection=Server=sqlserver-sales,1433;Database=Invoicing;User Id=sa;Password=yourStrong#Password123;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;
+      - connection=Server=invoice-db,1433;Database=Invoicing;User Id=sa;Password=yourStrong#Password123;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;
+      - auth=http://role-auth:80
     networks:
       - my_network
     ports:
       - "8085:8080"
     depends_on:
-      - sqlserver-sales
+      - invoice-db
+      - role-auth
+
+  # Invoice Details
+  invoice-details-db:
+    image: mcr.microsoft.com/mssql/server
+    container_name: invoice-details-db
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: yourStrong#Password123
+      ACCEPT_EULA: "Y"
+    volumes:
+      - invoice-data:/var/opt/mssql
+      - ./Backend/DataBases/InvoiceDetails/SQLQuery.sql:/SQLQuery.sql
+    networks:
+      - my_network
 
 networks:
   my_network:
     driver: bridge
 volumes:
-  sqlserver-data:
+  invoice-data:
