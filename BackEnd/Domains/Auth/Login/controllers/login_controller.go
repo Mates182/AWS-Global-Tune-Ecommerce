@@ -20,6 +20,18 @@ func NewLoginController(service service.LoginService) *LoginController {
 	}
 }
 
+// PostLogin 	godoc
+// @Summary 	Authenticate user and issue a JWT token
+// @Description Validates user credentials and returns a JWT token in a cookie upon successful authentication.
+// @Tags 		Authentication
+// @Accept 		json
+// @Produce 	json
+// @Param 		login body request.Request true "User login credentials"
+// @Success 	200 {object} response.Response "Login successful"
+// @Failure 	400 {object} response.Response "Invalid request body"
+// @Failure 	401 {object} response.Response "Invalid credentials"
+// @Failure 	500 {object} response.Response "Could not generate token"
+// @Router 		/login [post]
 func (controller *LoginController) PostLogin(c *gin.Context) {
 	var loginReq request.Request
 	if err := c.BindJSON(&loginReq); err != nil {
