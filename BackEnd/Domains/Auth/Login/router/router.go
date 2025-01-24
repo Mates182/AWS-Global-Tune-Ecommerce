@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter() *gin.Engine {
+func SetupRouter(loginController *controllers.LoginController) *gin.Engine {
 	router := gin.Default()
 
 	router.Use(config.GetCORSConfig())
 
-	router.POST("login", controllers.PostLogin)
+	router.POST("login", loginController.PostLogin)
 	return router
 }

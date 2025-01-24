@@ -1,4 +1,4 @@
-package controllers
+package business
 
 import (
 	"login-service/models"
