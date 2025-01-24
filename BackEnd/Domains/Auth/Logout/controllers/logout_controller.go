@@ -19,6 +19,15 @@ func NewLogoutController(service service.LogoutService) *LogoutController {
 	}
 }
 
+// PostLogout godoc
+// @Summary Logout user
+// @Description Logout by clearing the authentication cookie
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response "Logout successful"
+// @Failure 401 {object} response.Response "Unauthorized"
+// @Router /logout [post]
 func (controller *LogoutController) PostLogout(c *gin.Context) {
 	tokenString, err := c.Cookie("token")
 	if err != nil {
