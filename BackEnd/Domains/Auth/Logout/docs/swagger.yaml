@@ -1,0 +1,36 @@
+basePath: /
+definitions:
+  response.Response:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:80
+info:
+  contact: {}
+  description: |-
+    RESTful API for user logout in the GlobalTune E-Commerce platform.
+    This API handles user session termination securely using JWT tokens and the Gin framework.
+  title: Logout Service API
+  version: "1.0"
+paths:
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout by clearing the authentication cookie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful
+          schema:
+            $ref: '#/definitions/response.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Logout user
+      tags:
+      - Authentication
+swagger: "2.0"
