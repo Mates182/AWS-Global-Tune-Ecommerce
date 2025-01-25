@@ -25,3 +25,12 @@ func GetDBPassword() string {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	return dbPassword
 }
+func GetAuthServiceURI() string {
+	err := godotenv.Load()
+	if err != nil {
+		// TODO: remove on production
+		fmt.Println("Error loading .env file, ignore if is on docker")
+	}
+	authServiceURI := os.Getenv("AUTH_SERVICE_URI")
+	return authServiceURI
+}
