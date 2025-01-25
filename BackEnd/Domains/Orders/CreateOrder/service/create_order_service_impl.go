@@ -23,7 +23,6 @@ func NewCreateOrderServiceImpl(dbClient *redis.Client) CreateOrderService {
 }
 
 func (service *CreateOrderServiceImpl) CreateOrder(serviceRequest request.Request) (int, response.Response) {
-	// TODO: authenticate user
 	orderID := uuid.New().String()
 
 	order := model.Order{
