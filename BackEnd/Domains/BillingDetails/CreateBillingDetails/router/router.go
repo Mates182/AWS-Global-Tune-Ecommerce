@@ -10,5 +10,6 @@ func SetupRouter() *gin.Engine {
 	router := gin.Default()
 
 	router.Use(config.GetCORSConfig())
+	//[ginshot-routes]
 	return router
 }

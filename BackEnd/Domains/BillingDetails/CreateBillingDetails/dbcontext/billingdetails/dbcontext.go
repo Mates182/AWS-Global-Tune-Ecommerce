@@ -1,4 +1,5 @@
-package dbcontetxt
+
+package dbcontext
 
 import (
 	"context"
@@ -16,12 +17,12 @@ var clientOnce sync.Once
 
 func GetDBClient() *mongo.Client {
 	clientOnce.Do(func() {
-		endpoint := secrets.GetDBURI()
+		endpoint := secrets.GetbillingdetailsDBURI()
 		client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(endpoint))
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println("Connected to MongoDB")
+		fmt.Println("Connected to billingdetails Database Server")
 
 		err = client.Ping(context.Background(), readpref.Primary())
 		if err != nil {
@@ -33,3 +34,4 @@ func GetDBClient() *mongo.Client {
 
 	return clientInstance
 }
+		
