@@ -1,0 +1,17 @@
+services:
+  create-tracking-details-service:
+    build: .
+    ports:
+      - "80:80"
+    container_name: create-tracking-details-service
+    environment:
+      - GIN_MODE=release
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
