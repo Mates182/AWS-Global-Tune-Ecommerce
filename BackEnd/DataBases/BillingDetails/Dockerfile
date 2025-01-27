@@ -2,7 +2,7 @@ FROM mongo:latest
 
 WORKDIR /data
 
-COPY billing-details.json /data/billing-details.json
+COPY feedback.json /data/feedback.json
 
 COPY init-mongo.sh /docker-entrypoint-initdb.d/init-mongo.sh
 
