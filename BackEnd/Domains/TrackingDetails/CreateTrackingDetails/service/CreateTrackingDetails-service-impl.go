@@ -25,7 +25,7 @@ func NewCreateTrackingDetailsServiceImpl(dbClient *mongo.Client) CreateTrackingD
 }
 
 func (service *CreateTrackingDetailsServiceImpl) CreateTrackingDetailsHandler(request requests.CreateTrackingDetailsRequest) (int, responses.CreateTrackingDetailsResponse) {
-	mongoCollection := service.DBClient.Database("products").Collection("products")
+	mongoCollection := service.DBClient.Database("trackingdetails").Collection("trackingdetails")
 	if request.TrackingDetails.OrderID != "" {
 		existing := mongoCollection.FindOne(context.Background(), bson.M{"OrderID": request.TrackingDetails.OrderID})
 		if existing.Err() == nil {
