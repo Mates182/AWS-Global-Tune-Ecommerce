@@ -37,8 +37,8 @@ async function CategoryPage({ params }) {
       </aside>
       <section className="col-8">
         <div className="row row-cols-4">
-          {products.map((product) => (
-            <ProductCard product={product} />
+          {products.map((product, i) => (
+            <ProductCard product={product} key={i} />
           ))}
         </div>
       </section>
