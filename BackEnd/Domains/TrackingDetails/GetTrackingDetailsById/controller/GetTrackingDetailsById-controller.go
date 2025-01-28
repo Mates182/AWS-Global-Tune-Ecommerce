@@ -2,11 +2,11 @@
 package controller
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
 	requests "get-tracking-details-by-id-service/data/requests"
-	responses "get-tracking-details-by-id-service/data/responses"
 	services "get-tracking-details-by-id-service/service"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type GetTrackingDetailsByIdController struct {
@@ -20,11 +20,12 @@ func NewGetTrackingDetailsByIdController(service services.GetTrackingDetailsById
 }
 
 func (ctrl *GetTrackingDetailsByIdController) GetTrackingDetailsById(c *gin.Context) {
-	var request requests.GetTrackingDetailsByIdRequest
-	if err := c.BindJSON(&request); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, responses.GetTrackingDetailsByIdResponse{Message: "Invalid request body"})
+	ID := c.Param("id")
+	if ID == "" {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "ID is required"})
 		return
 	}
+	request := requests.GetTrackingDetailsByIdRequest{OrderID: ID}
 	status, res := ctrl.GetTrackingDetailsByIdService.GetTrackingDetailsByIdHandler(request)
 
 	c.IndentedJSON(status, res)
