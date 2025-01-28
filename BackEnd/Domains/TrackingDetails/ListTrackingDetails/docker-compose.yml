@@ -3,6 +3,19 @@
 # version: '3.8'
 
 services:
+  trackingdetails-db:
+    build:
+      context: ./config/trackingdetails
+      dockerfile: Dockerfile
+    container_name: trackingdetails-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
   # list-tracking-details API Container
   list-tracking-details:
     build: .
@@ -11,11 +24,14 @@ services:
     container_name: list-tracking-details
     environment:
       - GIN_MODE=release
+      - trackingdetails_URI=mongodb://user:password@trackingdetails-db:27017
     volumes:
       - .:/app
     networks:
       - app-network
     restart: unless-stopped
+    depends_on:
+      - trackingdetails-db
 
 networks:
   app-network:
