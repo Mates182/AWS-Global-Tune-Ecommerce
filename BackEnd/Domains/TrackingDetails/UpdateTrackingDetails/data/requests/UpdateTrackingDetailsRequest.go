@@ -1,6 +1,7 @@
 package request
 
+import "update-tracking-details-service/models"
 
 type UpdateTrackingDetailsRequest struct {
-	OrderID string `json:"OrderID"`
+	TrackingDetails models.TrackingDetails `json:"TrackingDetails"`
 }
