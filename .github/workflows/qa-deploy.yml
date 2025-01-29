@@ -21,8 +21,8 @@ jobs:
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/DataBases/products/
-          file: ./BackEnd/DataBases/products/Dockerfile
+          context: ./BackEnd/Domains/Cart/GetCartById
+          file: ./BackEnd/Domains/Cart/GetCartById/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/get-cart:latest
 
@@ -45,8 +45,8 @@ jobs:
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/DataBases/products/
-          file: ./BackEnd/DataBases/products/Dockerfile
+          context: ./BackEnd/Domains/Cart/DeleteCart
+          file: ./BackEnd/Domains/Cart/DeleteCart/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/delete-cart:latest
 
@@ -68,8 +68,8 @@ jobs:
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/DataBases/products/
-          file: ./BackEnd/DataBases/products/Dockerfile
+          context: ./BackEnd/Domains/Cart/SetCart
+          file: ./BackEnd/Domains/Cart/SetCart/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/set-cart:latest
 
@@ -91,8 +91,8 @@ jobs:
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/DataBases/products/
-          file: ./BackEnd/DataBases/products/Dockerfile
+          context: ./BackEnd/Domains/Products/GetProductById
+          file: ./BackEnd/Domains/Products/GetProductById/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/get-product:latest
 
@@ -135,8 +135,8 @@ jobs:
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/DataBases/products/
-          file: ./BackEnd/DataBases/products/Dockerfile
+          context: ./BackEnd/Domains/Products/GetAllProducts
+          file: ./BackEnd/Domains/Products/GetAllProducts/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/products-db:latest
 
@@ -158,8 +158,8 @@ jobs:
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/DataBases/products/
-          file: ./BackEnd/DataBases/products/Dockerfile
+          context: ./BackEnd/DataBases/cart
+          file: ./BackEnd/DataBases/cart/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/cart-db:latest
 
