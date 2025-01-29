@@ -2,6 +2,6 @@ package request
 
 import "get-shipping-details-by-id/models"
 
-type CreateShippingDetailsRequest struct {
+type GetShippingDetailsByIdRequest struct {
 	ShippingDetails models.ShippingDetails `json:"ShippingDetails"`
 }
