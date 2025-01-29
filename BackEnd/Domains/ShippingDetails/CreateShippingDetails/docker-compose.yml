@@ -3,6 +3,19 @@
 # version: '3.8'
 
 services:
+  shippingdetails-db:
+    build:
+      context: ./config/shippingdetails
+      dockerfile: Dockerfile
+    container_name: shippingdetails-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
   # create-shipping-details API Container
   create-shipping-details:
     build: .
@@ -11,11 +24,14 @@ services:
     container_name: create-shipping-details
     environment:
       - GIN_MODE=release
+      - shippingdetails_URI=mongodb://user:password@shippingdetails-db:27017
     volumes:
       - .:/app
     networks:
       - app-network
     restart: unless-stopped
+    depends_on:
+      - shippingdetails-db
 
 networks:
   app-network:
