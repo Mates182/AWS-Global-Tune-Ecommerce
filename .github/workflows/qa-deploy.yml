@@ -150,7 +150,7 @@ jobs:
               sudo docker stop get-product || echo "No existing process found"
               sudo docker rm get-product || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-product:latest
-              sudo docker run -d -p 80:80 --name get-product \
+              sudo docker run -d -p 80:27017 --name get-product \
                 -e MONGO_URI=${{ secrets.MONGO_URI }} \
                 ${{ secrets.DOCKER_USERNAME }}/get-product
 
@@ -172,6 +172,6 @@ jobs:
               sudo docker stop list-products || echo "No existing process found"
               sudo docker rm list-products || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/list-products:latest
-              sudo docker run -d -p 80:80 --name list-products \
+              sudo docker run -d -p 80:27017 --name list-products \
                 -e MONGO_URI=${{ secrets.MONGO_URI }} \
                 ${{ secrets.DOCKER_USERNAME }}/list-products
