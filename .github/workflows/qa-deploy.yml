@@ -36,7 +36,7 @@ jobs:
               sudo docker stop get-cart || echo "No existing process found"
               sudo docker rm get-cart || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-cart:latest
-              sudo docker run -d -p 27017:27017 --name get-cart \
+              sudo docker run -d -p 80:80 --name get-cart \
                 -e REDIS_ADDR=${{ secrets.REDIS_ADDR }} \
                 -e REDIS_PASSWORDD=${{ secrets.REDIS_PASSWORD }} \
                 ${{ secrets.DOCKER_USERNAME }}/get-cart
@@ -60,7 +60,7 @@ jobs:
               sudo docker stop delete-cart || echo "No existing process found"
               sudo docker rm delete-cart || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/delete-cart:latest
-              sudo docker run -d -p 27017:27017 --name delete-cart \
+              sudo docker run -d -p 80:80 --name delete-cart \
                 -e REDIS_ADDR=${{ secrets.REDIS_ADDR }} \
                 -e REDIS_PASSWORDD=${{ secrets.REDIS_PASSWORD }} \
                 ${{ secrets.DOCKER_USERNAME }}/delete-cart
@@ -83,7 +83,7 @@ jobs:
               sudo docker stop set-cart || echo "No existing process found"
               sudo docker rm set-cart || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/set-cart:latest
-              sudo docker run -d -p 27017:27017 --name set-cart \
+              sudo docker run -d -p 80:80 --name set-cart \
                 -e REDIS_ADDR=${{ secrets.REDIS_ADDR }} \
                 -e REDIS_PASSWORDD=${{ secrets.REDIS_PASSWORD }} \
                 ${{ secrets.DOCKER_USERNAME }}/set-cart
@@ -106,7 +106,7 @@ jobs:
               sudo docker stop get-product || echo "No existing process found"
               sudo docker rm get-product || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-product:latest
-              sudo docker run -d -p 27017:27017 --name get-product \
+              sudo docker run -d -p 80:80 --name get-product \
                 -e MONGO_URI=${{ secrets.MONGO_URI }} \
                 ${{ secrets.DOCKER_USERNAME }}/get-product
 
@@ -128,7 +128,7 @@ jobs:
               sudo docker stop list-products || echo "No existing process found"
               sudo docker rm list-products || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/list-products:latest
-              sudo docker run -d -p 27017:27017 --name list-products \
+              sudo docker run -d -p 80:80 --name list-products \
                 -e MONGO_URI=${{ secrets.MONGO_URI }} \
                 ${{ secrets.DOCKER_USERNAME }}/list-products
 
@@ -173,5 +173,5 @@ jobs:
               sudo docker stop cart-db || echo "No existing process found"
               sudo docker rm cart-db || echo "No existing process found"
               sudo docker pull ${{ secrets.DOCKER_USERNAME }}/cart-db:latest
-              sudo docker run -d -p 27017:27017 --name cart-db \
+              sudo docker run -d -p 6379 --name cart-db \
                 ${{ secrets.DOCKER_USERNAME }}/cart-db
