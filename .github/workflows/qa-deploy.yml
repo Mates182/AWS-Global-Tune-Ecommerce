@@ -42,7 +42,7 @@ jobs:
                 -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_ROOT_PASSWORD }} \
                 ${{ secrets.DOCKER_USERNAME }}/products-db
       
-      # EC2 List Products
+      # EC2 Get Product By ID
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
@@ -65,12 +65,12 @@ jobs:
                 -e MONGO_URI=${{ secrets.MONGO_URI }} \
                 ${{ secrets.DOCKER_USERNAME }}/get-product
 
-      #EC2 Get Product By ID
+      #EC2 List Products
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/DataBases/products/
-          file: ./BackEnd/DataBases/products/Dockerfile
+          context: ./BackEnd/Domains/Products/GetAllProducts
+          file: ./BackEnd/Domains/Products/GetAllProducts/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/list-products:latest
 
