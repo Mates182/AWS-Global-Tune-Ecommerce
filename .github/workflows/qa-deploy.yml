@@ -17,7 +17,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
+        
+      # EC2 DB Products
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
@@ -40,98 +41,8 @@ jobs:
                 -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_ROOT_USERNAME }} \
                 -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_ROOT_PASSWORD }} \
                 ${{ secrets.DOCKER_USERNAME }}/products-db
-                
-      - name: Build and push on Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./BackEnd/DataBases/cart
-          file: ./BackEnd/DataBases/cart/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/cart-db:latest
-
-      - name: Executing remote ssh on EC2 server
-        uses: appleboy/ssh-action@master
-        with:
-            host: ${{ secrets.DNS_CART_DB }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              sudo docker stop cart-db || echo "No existing process found"
-              sudo docker rm cart-db || echo "No existing process found"
-              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/cart-db:latest
-              sudo docker run -d -p 6379 --name cart-db \
-                ${{ secrets.DOCKER_USERNAME }}/cart-db
-
-      - name: Build and push on Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./BackEnd/Domains/Cart/GetCartById
-          file: ./BackEnd/Domains/Cart/GetCartById/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/get-cart:latest
-
-      - name: Executing remote ssh on EC2 server
-        uses: appleboy/ssh-action@master
-        with:
-            host: ${{ secrets.DNS_GET_CART }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              sudo docker stop get-cart || echo "No existing process found"
-              sudo docker rm get-cart || echo "No existing process found"
-              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-cart:latest
-              sudo docker run -d -p 80:80 --name get-cart \
-                -e REDIS_ADDR=${{ secrets.REDIS_ADDR }} \
-                -e REDIS_PASSWORDD=${{ secrets.REDIS_PASSWORD }} \
-                ${{ secrets.DOCKER_USERNAME }}/get-cart
-
-
-      - name: Build and push on Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./BackEnd/Domains/Cart/DeleteCart
-          file: ./BackEnd/Domains/Cart/DeleteCart/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/delete-cart:latest
-
-      - name: Executing remote ssh on EC2 server
-        uses: appleboy/ssh-action@master
-        with:
-            host: ${{ secrets.DNS_DELETE_CART }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              sudo docker stop delete-cart || echo "No existing process found"
-              sudo docker rm delete-cart || echo "No existing process found"
-              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/delete-cart:latest
-              sudo docker run -d -p 80:80 --name delete-cart \
-                -e REDIS_ADDR=${{ secrets.REDIS_ADDR }} \
-                -e REDIS_PASSWORDD=${{ secrets.REDIS_PASSWORD }} \
-                ${{ secrets.DOCKER_USERNAME }}/delete-cart
-                
-      - name: Build and push on Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./BackEnd/Domains/Cart/SetCart
-          file: ./BackEnd/Domains/Cart/SetCart/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/set-cart:latest
-
-      - name: Executing remote ssh on EC2 server
-        uses: appleboy/ssh-action@master
-        with:
-            host: ${{ secrets.DNS_SET_CART }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              sudo docker stop set-cart || echo "No existing process found"
-              sudo docker rm set-cart || echo "No existing process found"
-              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/set-cart:latest
-              sudo docker run -d -p 80:80 --name set-cart \
-                -e REDIS_ADDR=${{ secrets.REDIS_ADDR }} \
-                -e REDIS_PASSWORDD=${{ secrets.REDIS_PASSWORD }} \
-                ${{ secrets.DOCKER_USERNAME }}/set-cart
-                
+      
+      # EC2 List Products
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
@@ -153,7 +64,7 @@ jobs:
               sudo docker run -d -p 80:27017 --name get-product \
                 -e MONGO_URI=${{ secrets.MONGO_URI }} \
                 ${{ secrets.DOCKER_USERNAME }}/get-product
-
+      #EC2 Get Product By ID
       - name: Build and push on Docker image
         uses: docker/build-push-action@v4
         with:
