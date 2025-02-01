@@ -1,0 +1,284 @@
+[{
+  "id": "GTR-GIB-RD-001",
+  "title": "Gibson RD Artist Electric Guitar",
+  "description": "The Gibson RD Artist is a vintage-style electric guitar with a unique body shape, powerful humbucker pickups, and great sustain. Perfect for musicians looking for a classic rock sound.",
+  "category": "Electric Guitars",
+  "price": 1200,
+  "stock": 15,
+  "tags": [
+    "electric guitar",
+    "Gibson",
+    "vintage",
+    "RD Artist",
+    "humucker pickups"
+  ],
+  "brand": "Gibson",
+  "sku": "GTR-GIB-RD-001",
+  "weight": 3.8,
+  "dimensions": [
+    {
+      "length": 100,
+      "width": 40,
+      "height": 15
+    }
+  ],
+  "warranty": "2 years limited warranty from the manufacturer",
+  "reviews": [
+    {
+      "user": "JohnDoe",
+      "comment": "Incredible sound and playability. One of the best guitars I've ever played!",
+      "stars": 5
+    },
+    {
+      "user": "JaneDoe",
+      "comment": "Great guitar with a vintage tone. The black color looks amazing!",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://guitar-compare.com/wp-content/uploads/2017/12/Gibson-RD-Artist-2014_01.jpg",
+  "images": [
+    "https://guitar-compare.com/wp-content/uploads/2017/12/Gibson-RD-Artist-2014_01.jpg",
+    "https://cdn11.bigcommerce.com/s-dks6ju/images/stencil/original/products/2305/551650/vintage-1977-gibson-rd-artist-electric-guitar-black-finish__04170.1711526621.jpg?c=2"
+  ]
+},
+{
+  "id": "GTR-GRE-G5422TG-001",
+  "title": "Gretsch G5422TG Electromatic SW",
+  "description": "The Gretsch G5422TG Electromatic SW is a semi-hollow body electric guitar with classic Gretsch tone, perfect for blues, rock, and jazz. It features a stylish White finish and powerful Filter'Tron pickups.",
+  "category": "Electric Guitars",
+  "price": 950,
+  "stock": 10,
+  "tags": [
+    "electric guitar",
+    "Gretsch",
+    "semi-hollow",
+    "Filter'Tron pickups",
+    "vintage"
+  ],
+  "brand": "Gretsch",
+  "sku": "GTR-GRE-G5422TG-001",
+  "weight": 3.5,
+  "dimensions": [
+    {
+      "length": 102,
+      "width": 41,
+      "height": 13
+    }
+  ],
+  "warranty": "2 years limited warranty from the manufacturer",
+  "reviews": [
+    {
+      "user": "MusicLover",
+      "comment": "Great tone and sustain! Ideal for a wide range of genres, from jazz to rock.",
+      "stars": 5
+    },
+    {
+      "user": "RockFanatic",
+      "comment": "Awesome guitar with a smooth playability. The Filter'Tron pickups provide a rich and clear sound.",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://thumbs.static-thomann.de/thumb/padthumb600x600/pics/bdb/_53/535960/17205238_800.jpg",
+  "images": [
+    "https://thumbs.static-thomann.de/thumb/padthumb600x600/pics/bdb/_53/535960/17205238_800.jpg",
+    "https://sc1.musik-produktiv.com/pic-010142503l/gretsch-guitars-electromatic-g5422tg-dc-org.jpg"
+  ]
+},
+{
+  "id": "DRUM-PEARL-JJ-001",
+  "title": "Pearl Joey Jordison Drum Kit, Black Lacquer",
+  "description": "The Pearl Joey Jordison Signature Drum Kit, Black Lacquer is the ultimate drum set for metal enthusiasts. In excellent condition with only minor signs of use, this kit features black lacquered shells, black hardware, and Joey Jordison's personal signature. It includes the renowned Joey Jordison Signature Snare Drum and is built on Pearl's legendary Export series, ensuring speed, power, and versatility for any drummer.",
+  "category": "Drum Kits",
+  "price": 900,
+  "stock": 5,
+  "tags": [
+    "drum kit",
+    "Pearl",
+    "Joey Jordison",
+    "black lacquer",
+    "signature snare"
+  ],
+  "brand": "Pearl",
+  "sku": "DRUM-PEARL-JJ-001",
+  "weight": 30,
+  "dimensions": [
+    {
+      "length": 100,
+      "width": 40,
+      "height": 80
+    }
+  ],
+  "warranty": "2 years limited warranty from the manufacturer",
+  "reviews": [
+    {
+      "user": "DrumLover",
+      "comment": "Incredible power and clarity! Perfect for any metal drummer.",
+      "stars": 5
+    },
+    {
+      "user": "BeatMaster",
+      "comment": "This drum set is a beast! Great sound and the black lacquer finish looks amazing.",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://rvb-img.reverb.com/image/upload/s--GX27uqRS--/f_auto,t_large/v1556822223/vphuggqpbxiipwyw3ko2.jpg",
+  "images": [
+    "https://rvb-img.reverb.com/image/upload/s--GX27uqRS--/f_auto,t_large/v1556822223/vphuggqpbxiipwyw3ko2.jpg",
+    "https://rvb-img.reverb.com/image/upload/s--Hw9elLjb--/f_auto,t_large/v1556822225/huyxkmhkaukish088unl.jpg",
+    "https://rvb-img.reverb.com/image/upload/s--dWMYfsbo--/f_auto,t_large/v1556822225/deot3iuxf3x6hkhk6odz.jpg"
+  ]
+},
+{
+  "id": "PICK-DUNLOP-JP-001",
+  "title": "Dunlop John Petrucci Jazz III, 6-Pack Picks",
+  "description": "The Dunlop John Petrucci Jazz III Picks are crafted to meet the exacting standards of legendary guitarist John Petrucci. Made from durable Ultex material, these picks feature a polished beveled tip for precision and an embossed JP logo for enhanced grip. Perfect for players seeking accuracy and tone clarity.",
+  "category": "Guitar Accessories",
+  "price": 9.99,
+  "stock": 50,
+  "tags": [
+    "guitar picks",
+    "John Petrucci",
+    "Ultex",
+    "Dunlop Jazz III",
+    "accessories"
+  ],
+  "brand": "Jim Dunlop",
+  "sku": "PICK-DUNLOP-JP-001",
+  "weight": 0.01,
+  "dimensions": [
+    {
+      "length": 4,
+      "width": 4,
+      "height": 0.2
+    }
+  ],
+  "warranty": "No warranty provided for accessories",
+  "reviews": [
+    {
+      "user": "GuitarMaster",
+      "comment": "Excellent grip and durability. These picks make shredding effortless!",
+      "stars": 5
+    },
+    {
+      "user": "ToneChaser",
+      "comment": "Great for precise playing and the grip is a game-changer.",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://m.media-amazon.com/images/I/61TneROUFSL._AC_SL1280_.jpg",
+  "images": [
+    "https://m.media-amazon.com/images/I/61TneROUFSL._AC_SL1280_.jpg",
+    "https://m.media-amazon.com/images/I/51Gd2V4roTL._AC_SL1280_.jpg",
+    "https://m.media-amazon.com/images/I/51MU2qmb95L._AC_SL1280_.jpg"
+  ]
+},
+{
+  "id": "DRM-VICFIRTH-AC5A-001",
+  "title": "Vic Firth Original - American Classic 5A Black Drumsticks",
+  "description": "The Vic Firth American Classic 5A Black Drumsticks combine tradition and style, crafted from durable hickory for excellent balance and performance. Featuring an oval tip, they deliver a warm, full tone on drums and cymbals. Ideal for versatile drummers seeking reliability and precision.",
+  "category": "Drum Accessories",
+  "price": 15.99,
+  "stock": 30,
+  "tags": [
+    "drumsticks",
+    "Vic Firth",
+    "American Classic",
+    "hickory",
+    "5A",
+    "oval tip"
+  ],
+  "brand": "Vic Firth",
+  "sku": "DRM-VICFIRTH-AC5A-001",
+  "weight": 0.2,
+  "dimensions": [
+    {
+      "length": 40.6,
+      "width": 2,
+      "height": 2
+    }
+  ],
+  "warranty": "No warranty provided for drumsticks",
+  "reviews": [
+    {
+      "user": "DrummerKing",
+      "comment": "Perfect balance and a great feel. These drumsticks are my go-to for every gig!",
+      "stars": 5
+    },
+    {
+      "user": "PercussionPro",
+      "comment": "Reliable and durable. The black finish looks amazing on stage.",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_739353-MLC48589700898_122021-O.webp",
+  "images": [
+    "https://http2.mlstatic.com/D_NQ_NP_739353-MLC48589700898_122021-O.webp"
+  ]
+},
+{
+  "id": "KEY-NUMOTION-REVO1-001",
+  "title": "Nu-Motion Revo 1 Wireless Curved Keyboard Controller",
+  "description": "The Nu-Motion Revo 1 is a revolutionary wireless curved keyboard controller designed for ultimate freedom and natural playability. Perfect for live performances, it combines ergonomic design with innovative features, allowing musicians to express themselves while moving freely on stage or even interacting with the audience. Trusted by artists like Jordan Rudess of Dream Theater, the Revo 1 redefines the keyboard playing experience.",
+  "category": "Keyboard Controllers",
+  "price": 3999.99,
+  "stock": 12,
+  "tags": [
+    "keyboard controller",
+    "wireless",
+    "curved keyboard",
+    "Revo 1",
+    "live performance",
+    "ergonomic design"
+  ],
+  "brand": "Nu-Motion",
+  "sku": "KEY-NUMOTION-REVO1-001",
+  "weight": 3.2,
+  "dimensions": [
+    {
+      "length": 85,
+      "width": 22,
+      "height": 7
+    }
+  ],
+  "warranty": "1 year limited warranty from the manufacturer",
+  "features": {
+    "keys": "Full-size velocity-sensitive keys with aftertouch",
+    "wireless": "Onboard MIDI Wireless communication system",
+    "battery": "Up to 15 hours of battery life",
+    "controls": [
+      "Pitch wheel",
+      "Modulation slider",
+      "2 assignable controller knobs",
+      "2 mix volume controls"
+    ],
+    "memory": "60 user memory slots and 10 quick recall favorites",
+    "functions": [
+      "Split and layer functionality",
+      "Octave shift (± 3)",
+      "Transposition by semitones (± 12)",
+      "Sequencer/Panic button"
+    ],
+    "unique": [
+      "Wireless sustain pedal",
+      "Motion accelerometer effect trigger"
+    ]
+  },
+  "reviews": [
+    {
+      "user": "StagePerformer123",
+      "comment": "An incredible tool for live performances. The freedom of movement is unparalleled, and the wireless sustain pedal is a game-changer.",
+      "stars": 5
+    },
+    {
+      "user": "SynthLover",
+      "comment": "A bit pricey, but worth it for the innovative features. It's a must-have for any serious performer.",
+      "stars": 4
+    }
+  ],
+  "thumbnail": "https://rvb-img.reverb.com/image/upload/s--0RkVPhBy--/a_0/f_auto,t_large/v1661070212/r5qlnc7x9iscivpgraue.png",
+  "images": [
+    "https://rvb-img.reverb.com/image/upload/s--0RkVPhBy--/a_0/f_auto,t_large/v1661070212/r5qlnc7x9iscivpgraue.png",
+    "https://rvb-img.reverb.com/image/upload/s--eJgRJujz--/a_0/f_auto,t_large/v1661070221/zsd7e4sy2mvyrjd3lrh9.png",
+    "https://rvb-img.reverb.com/image/upload/s--WKxqqG4J--/a_0/f_auto,t_large/v1661070215/i5unrwuvvonahtwbzxld.png"
+  ]
+}]

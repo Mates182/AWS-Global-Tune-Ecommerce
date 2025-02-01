@@ -1,0 +1,4 @@
+.env
+.gitignore
+go.sum
+README.md

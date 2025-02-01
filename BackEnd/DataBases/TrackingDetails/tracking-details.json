@@ -1,0 +1,38 @@
+[{
+    "TrackingNumber": "",
+    "OrderID": "",
+    "Carrier": "",
+    "Status": "",
+    "EstimatedDeliveryDate": "",
+    "Origin": {
+      "Country": "",
+      "City": "",
+      "State": "",
+      "ZIPPostalCode": ""
+    },
+    "Destination": {
+      "Country": "",
+      "City": "",
+      "State": "",
+      "ZIPPostalCode": ""
+    },
+    "CurrentLocation": {
+      "Country": "",
+      "City": "",
+      "State": "",
+      "ZIPPostalCode": "",
+      "Timestamp": ""
+    },
+    "TrackingHistory": [
+      {
+        "Status": "",
+        "Location": {
+          "Country": "",
+          "City": "",
+          "State": "",
+          "ZIPPostalCode": ""
+        },
+        "Timestamp": ""
+      }
+    ]
+  }]

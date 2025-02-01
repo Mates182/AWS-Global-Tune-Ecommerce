@@ -1,0 +1,41 @@
+name: Deploy Frontend service
+
+on:
+  push:
+    branches:
+      - test
+jobs:
+  push_to_registry:
+    name: Push Docker Images to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Products GraphQL Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./FrontEnd/global-tune/
+          file: ./FrontEnd/global-tune/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/gt-front-service-test:latest
+
+      - name: Executing remote ssh on EC2 server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_SERVER_FRONT_TEST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop gt-front-service-test || echo "No existing process found"
+            sudo docker rm gt-front-service-test || echo "No existing process found"
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/gt-front-service-test:latest
+            sudo docker run -d -p 80:3000 --name gt-front-service-test \
+              -e GRAPHQL_PRODUCTS_ENDPOINT=${{ secrets.GRAPHQL_PRODUCTS_ENDPOINT }} \
+              ${{ secrets.DOCKER_USERNAME }}/gt-front-service-test
