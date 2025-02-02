@@ -2,10 +2,10 @@ const mysql = require("mysql2");
 
 // Configuring the AWS RDS connection
 const pool = mysql.createPool({
-  host: "database-sql.c5eoehvxjn2a.us-east-1.rds.amazonaws.com", // Switch to AWS RDS Endpoint
-  user: "globaltune",
-  password: "globaltune202",
-  database: "database-sql",
+  host: "TU_ENDPOINT_RDS", // Switch to AWS RDS Endpoint
+  user: "TU_USUARIO",
+  password: "TU_PASSWORD",
+  database: "Invoicing",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
