@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker network create app-network
+            sudo docker network create app-network
             echo "Pulling latest images for Create Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/create-shipping-details:latest
@@ -74,7 +74,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker network create app-network
+            sudo docker network create app-network
             echo "Pulling latest images for Delete Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/delete-shipping-details:latest
@@ -109,7 +109,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker network create app-network
+            sudo docker network create app-network
             echo "Pulling latest images for Get Shipping Details By ID..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-shipping-details-by-id:latest
@@ -146,7 +146,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker network create app-network
+            sudo docker network create app-network
             echo "Pulling latest images for update Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/update-shipping-details:latest
@@ -181,7 +181,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker network create app-network
+            sudo docker network create app-network
             echo "Pulling latest images for list Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/list-shipping-details:latest
