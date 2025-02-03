@@ -1,31 +1,21 @@
 services:
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    networks:
-      - app-network
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
 
-  kafka:
-    image: confluentinc/cp-kafka:latest
+  shipping_details_replicant:
+    image: mates182/shipping-details-replicant
+    ports:
+      - "8080:80"
+    container_name: shipping_details_replicant
+    environment:
+      - GIN_MODE=release
+      - shipping_details_BROKER=http://18.204.201.238:29092
+    volumes:
+      - .:/app
     networks:
       - app-network
+    restart: unless-stopped
     depends_on:
-      - zookeeper
-    container_name: kafka
-    ports:
-      - "9092:9092"
-      - "29092:29092"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      - kafka
 
 networks:
   app-network:

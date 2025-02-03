@@ -1,22 +1,22 @@
 services:
   shipping_details-db:
-    image: "${DOCKER_USERNAME}/shipping-details-db:latest"
+    image: "mates182/shipping-details-db:latest"
     container_name: shipping_details-db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
-      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - "27017:27017"
     networks:
       - app-network
 
   create_shipping_details:
-    image: "${DOCKER_USERNAME}/create-shipping-details:latest"
+    image: "mates182/create-shipping-details:latest"
     container_name: create_shipping_details
     ports:
       - "80:80"
     environment:
-      GIN_MODE: "${GIN_MODE}"
+      GIN_MODE: release
       shipping_details_URI: "${shipping_details_URI}"
       shipping_details_BROKER: "${shipping_details_BROKER}"
     networks:
