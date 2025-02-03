@@ -1,7 +1,9 @@
 name: Run Shipping Details Services on AWS EC2
 
 on:
-  workflow_dispatch:  # Allows manual execution from GitHub Actions UI
+  push:
+    branches:
+      - qa-aws-deploy
 
 jobs:
   deploy:
