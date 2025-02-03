@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-
       - name: Deploy to EC2 - Create Shipping Details (With MongoDB)
         uses: appleboy/ssh-action@master
         with:
@@ -44,7 +43,6 @@ jobs:
               -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
-              --depends-on shipping_details-db \
               ${{ secrets.DOCKER_USERNAME }}/create-shipping-details:latest
 
       - name: Deploy to EC2 - Delete Shipping Details (With MongoDB)
@@ -79,7 +77,6 @@ jobs:
               -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
-              --depends-on shipping_details-db \
               ${{ secrets.DOCKER_USERNAME }}/delete-shipping-details:latest
 
       - name: Deploy to EC2 - Get Shipping Details By ID (With MongoDB)
@@ -114,7 +111,6 @@ jobs:
               -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
-              --depends-on shipping_details-db \
               ${{ secrets.DOCKER_USERNAME }}/get-shipping-details-by-id:latest
 
 
@@ -151,7 +147,6 @@ jobs:
               -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
-              --depends-on shipping_details-db \
               ${{ secrets.DOCKER_USERNAME }}/update-shipping-details:latest
 
       - name: Deploy to EC2 - list Shipping Details (With MongoDB)
@@ -186,5 +181,4 @@ jobs:
               -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
-              --depends-on shipping_details-db \
               ${{ secrets.DOCKER_USERNAME }}/list-shipping-details:latest
