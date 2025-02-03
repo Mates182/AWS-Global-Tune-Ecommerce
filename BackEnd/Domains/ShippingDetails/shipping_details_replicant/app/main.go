@@ -21,7 +21,7 @@ func main() {
 	msgCnt := 0
 
 	// 1. Create a new consumer and start it.
-	worker, err := event.GetKafkaConsumer(secrets.GetKafkaBrokers()})
+	worker, err := event.GetKafkaConsumer(secrets.GetKafkaBrokers())
 	if err != nil {
 		panic(err)
 	}
