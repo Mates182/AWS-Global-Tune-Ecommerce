@@ -7,6 +7,7 @@ import (
 	message "models-replicant/internal/data/messages"
 	"models-replicant/internal/data/models"
 	"models-replicant/internal/event"
+	"models-replicant/internal/secrets"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,7 +21,7 @@ func main() {
 	msgCnt := 0
 
 	// 1. Create a new consumer and start it.
-	worker, err := event.GetKafkaConsumer([]string{"kafka:29092"})
+	worker, err := event.GetKafkaConsumer(secrets.GetKafkaBrokers()})
 	if err != nil {
 		panic(err)
 	}
@@ -89,7 +90,7 @@ func ProcessMsg(msg *sarama.ConsumerMessage, index int) {
 			return
 		}
 
-		brokers := []string{"kafka:29092"}
+		brokers := secrets.GetKafkaBrokers()
 		topic := "shipping_details"
 		err = event.PushToKafka(topic, initMessage, brokers)
 		if err != nil {
