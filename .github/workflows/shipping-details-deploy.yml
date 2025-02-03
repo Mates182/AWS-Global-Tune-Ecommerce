@@ -1,45 +1,208 @@
-name: Deploy Shipping Details Microservices on AWS
+name: Run Shipping Details Services on AWS EC2
 
 on:
-  push:
-    branches:
-      - qa-aws-deploy
+  workflow_dispatch:  # Allows manual execution from GitHub Actions UI
 
 jobs:
   deploy:
-    name: Deploy Microservices with Docker Compose
+    name: Deploy Services on AWS EC2
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v3
-
-      - name: Executing remote SSH on EC2 server for Create Shipping Details
+      - name: Deploy to EC2 - Shipping Details Replicant
         uses: appleboy/ssh-action@master
         with:
-            host: ${{ secrets.EC2_DNS_CREATE_SHIPPING_DETAILS }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              echo "Navigating to deployment directory..."
-              cd ~/deployments/shipping_details
+          host: ${{ secrets.EC2_HOST_SD_REPLICANT }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest image for Shipping Details Replicant..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-replicant:latest
 
-              echo "Creating .env file with secrets..."
-              cat <<EOF > .env
-              DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-              MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
-              MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
-              GIN_MODE=release
-              shipping_details_URI=mongodb://user:password@shipping_details-db:27017
-              shipping_details_BROKER=kafka:29092
-              EOF
+            echo "Stopping and removing existing container..."
+            sudo docker stop shipping_details_replicant || echo "No existing container"
+            sudo docker rm shipping_details_replicant || echo "No existing container"
 
-              echo "Stopping existing containers..."
-              sudo docker-compose --env-file .env down || echo "No existing containers found"
+            echo "Starting Shipping Details Replicant container..."
+            sudo docker run -d --name shipping_details_replicant \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/shipping-details-replicant:latest
 
-              echo "Pulling latest images..."
-              sudo docker-compose --env-file .env pull
+      - name: Deploy to EC2 - Create Shipping Details (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_CREATE }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest images for Create Shipping Details..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/create-shipping-details:latest
 
-              echo "Starting containers with docker-compose..."
-              sudo docker-compose --env-file .env up -d
-              
-              echo "Deployment completed successfully!"
+            echo "Stopping and removing existing containers..."
+            sudo docker stop shipping_details-db create_shipping_details || echo "No existing containers"
+            sudo docker rm shipping_details-db create_shipping_details || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name shipping_details-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.SD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.SD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+
+            echo "Starting Create Shipping Details container..."
+            sudo docker run -d --name create_shipping_details \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
+              -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              --depends-on shipping_details-db \
+              ${{ secrets.DOCKER_USERNAME }}/create-shipping-details:latest
+
+      - name: Deploy to EC2 - Delete Shipping Details (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_DELETE }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest images for Delete Shipping Details..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/delete-shipping-details:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop shipping_details-db delete_shipping_details || echo "No existing containers"
+            sudo docker rm shipping_details-db delete_shipping_details || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name shipping_details-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.SD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.SD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+
+            echo "Starting Delete Shipping Details container..."
+            sudo docker run -d --name delete_shipping_details \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
+              -e shipping_details_BROKER=kafka:29092 \
+              --network app-network \
+              --restart unless-stopped \
+              --depends-on shipping_details-db \
+              ${{ secrets.DOCKER_USERNAME }}/delete-shipping-details:latest
+
+      - name: Deploy to EC2 - Get Shipping Details By ID (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_GET_BY_ID }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest images for Get Shipping Details By ID..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-shipping-details-by-id:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop shipping_details-db get_shipping_details_by_id || echo "No existing containers"
+            sudo docker rm shipping_details-db get_shipping_details_by_id || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name shipping_details-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.SD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.SD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+
+            echo "Starting Get Shipping Details By ID container..."
+            sudo docker run -d --name get_shipping_details_by_id \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
+              --network app-network \
+              --restart unless-stopped \
+              --depends-on shipping_details-db \
+              ${{ secrets.DOCKER_USERNAME }}/get-shipping-details-by-id:latest
+
+
+
+      - name: Deploy to EC2 - UPDATE Shipping Details (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_UPDATE }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest images for update Shipping Details..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/update-shipping-details:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop shipping_details-db update_shipping_details || echo "No existing containers"
+            sudo docker rm shipping_details-db update_shipping_details || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name shipping_details-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.SD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.SD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+
+            echo "Starting update Shipping Details container..."
+            sudo docker run -d --name update_shipping_details \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
+              -e shipping_details_BROKER=kafka:29092 \
+              --network app-network \
+              --restart unless-stopped \
+              --depends-on shipping_details-db \
+              ${{ secrets.DOCKER_USERNAME }}/update-shipping-details:latest
+
+      - name: Deploy to EC2 - list Shipping Details (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_LIST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest images for list Shipping Details..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/list-shipping-details:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop shipping_details-db list_shipping_details || echo "No existing containers"
+            sudo docker rm shipping_details-db list_shipping_details || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name shipping_details-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.SD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.SD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+
+            echo "Starting list Shipping Details container..."
+            sudo docker run -d --name list_shipping_details \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
+              -e shipping_details_BROKER=kafka:29092 \
+              --network app-network \
+              --restart unless-stopped \
+              --depends-on shipping_details-db \
+              ${{ secrets.DOCKER_USERNAME }}/list-shipping-details:latest

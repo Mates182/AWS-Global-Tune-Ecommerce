@@ -27,21 +27,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  product-replicant:
-    build: ..
-    ports:
-      - "8080:80"
-    container_name: product-replicant
-    environment:
-      - GIN_MODE=release
-    volumes:
-      - .:/app
-    networks:
-      - app-network
-    restart: unless-stopped
-    depends_on:
-      - kafka
-
 networks:
   app-network:
     driver: bridge
