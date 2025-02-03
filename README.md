@@ -16,7 +16,7 @@ Welcome to **Global Tune**, an international e-commerce platform dedicated to pr
 
 ## 🔧 **Technology Stack**  
 - **Backend**:  
-  - Languages: C# (.NET), Python, Go, Rust, Node.js.  
+  - Languages: C# (.NET), Python, Go, Node.js.  
   - Microservices: REST, GraphQL, WebSocket, SOAP, with Event-Driven Architecture (SNS, SQS).  
 - **Frontend**:  
   - Web: React with Next.js  

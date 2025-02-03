@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-strawberry-graphql
-httpie
-pymongo
-python-dotenv
