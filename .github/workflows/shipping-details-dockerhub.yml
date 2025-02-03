@@ -1,0 +1,83 @@
+name: Push Shipping Details Services to Docker Hub
+
+on:
+  push:
+    branches:
+      - qa-aws-deploy
+
+jobs:
+  push_to_registry:
+    name: Push Docker Images to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Shipping Details Database Image
+      - name: Build and push Shipping Details DB image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/DataBases/ShippingDetails
+          file: ./BackEnd/DataBases/ShippingDetails/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
+
+      # Create Shipping Details Image
+      - name: Build and push Create Shipping Details image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/ShippingDetails/create_shipping_details
+          file: ./BackEnd/Domains/ShippingDetails/create_shipping_details/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/create-shipping-details:latest
+
+      # Delete Shipping Details Image
+      - name: Build and push Delete Shipping Details image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/ShippingDetails/delete_shipping_details
+          file: ./BackEnd/Domains/ShippingDetails/delete_shipping_details/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/delete-shipping-details:latest
+
+      # Get Shipping Details By ID Image
+      - name: Build and push Get Shipping Details By ID image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/ShippingDetails/get_shipping_details_by_id
+          file: ./BackEnd/Domains/ShippingDetails/get_shipping_details_by_id/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/get-shipping-details-by-id:latest
+
+      # List Shipping Details Image
+      - name: Build and push List Shipping Details image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/ShippingDetails/list_shipping_details
+          file: ./BackEnd/Domains/ShippingDetails/list_shipping_details/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/list-shipping-details:latest
+
+      # Shipping Details Replicant Image
+      - name: Build and push Shipping Details Replicant image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/ShippingDetails/shipping_details_replicant
+          file: ./BackEnd/Domains/ShippingDetails/shipping_details_replicant/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/shipping-details-replicant:latest
+
+      # Update Shipping Details Image
+      - name: Build and push Update Shipping Details image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/ShippingDetails/update_shipping_details
+          file: ./BackEnd/Domains/ShippingDetails/update_shipping_details/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/update-shipping-details:latest

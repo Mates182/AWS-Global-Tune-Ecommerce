@@ -1,0 +1,45 @@
+name: Deploy Shipping Details Microservices on AWS
+
+on:
+  push:
+    branches:
+      - qa-aws-deploy
+
+jobs:
+  deploy:
+    name: Deploy Microservices with Docker Compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Executing remote SSH on EC2 server for Create Shipping Details
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.EC2_DNS_CREATE_SHIPPING_DETAILS }}
+            username: ${{ secrets.EC2_USER }}
+            key: ${{ secrets.EC2_SSH_KEY }}
+            script: |
+              echo "Navigating to deployment directory..."
+              cd ~/deployments/shipping_details
+
+              echo "Creating .env file with secrets..."
+              cat <<EOF > .env
+              DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+              MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
+              MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+              GIN_MODE=release
+              shipping_details_URI=mongodb://user:password@shipping_details-db:27017
+              shipping_details_BROKER=kafka:29092
+              EOF
+
+              echo "Stopping existing containers..."
+              sudo docker-compose --env-file .env down || echo "No existing containers found"
+
+              echo "Pulling latest images..."
+              sudo docker-compose --env-file .env pull
+
+              echo "Starting containers with docker-compose..."
+              sudo docker-compose --env-file .env up -d
+              
+              echo "Deployment completed successfully!"
