@@ -1,17 +1,1 @@
-[{
-    "ID": "",
-    "RecipientName": "",
-    "Address": {
-      "Street": "",
-      "City": "",
-      "StateProvince": "",
-      "ZIPPostalCode": "",
-      "CountryRegion": ""
-    },
-    "Phone": "",
-    "Email": "",
-    "ShippingMethod": "",
-    "TrackingNumber": "",
-    "EstimatedDeliveryDate": "",
-    "SpecialInstructions": ""
-  }]
+[{}]

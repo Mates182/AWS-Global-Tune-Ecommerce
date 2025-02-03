@@ -8,6 +8,48 @@ jobs:
     name: Deploy Services on AWS EC2
     runs-on: ubuntu-latest
     steps:
+
+      - name: Executing remote SSH on EC2 for Kafka & Zookeeper
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_BROKER }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest Kafka and Zookeeper images..."
+            sudo docker pull confluentinc/cp-zookeeper:latest
+            sudo docker pull confluentinc/cp-kafka:latest
+
+            echo "Stopping and removing existing Kafka & Zookeeper containers..."
+            sudo docker stop zookeeper kafka || echo "No existing containers"
+            sudo docker rm zookeeper kafka || echo "No existing containers"
+
+            echo "Creating app-network if not exists..."
+            sudo docker network create app-network || echo "Network already exists"
+
+            echo "Starting Zookeeper container..."
+            sudo docker run -d --name zookeeper \
+              --network app-network \
+              -p 2181:2181 \
+              -e ZOOKEEPER_CLIENT_PORT=2181 \
+              -e ZOOKEEPER_TICK_TIME=2000 \
+              --restart unless-stopped \
+              confluentinc/cp-zookeeper:latest
+
+            echo "Starting Kafka container..."
+            sudo docker run -d --name kafka \
+              --network app-network \
+              --depends-on zookeeper \
+              -p 9092:9092 -p 29092:29092 \
+              -e KAFKA_BROKER_ID=1 \
+              -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 \
+              -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092 \
+              -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT \
+              -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT \
+              -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
+              --restart unless-stopped \
+              confluentinc/cp-kafka:latest
+
       - name: Deploy to EC2 - Shipping Details Replicant
         uses: appleboy/ssh-action@master
         with:
@@ -95,7 +137,7 @@ jobs:
               -p 80:80 \
               -e GIN_MODE=release \
               -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
-              -e shipping_details_BROKER=kafka:29092 \
+              -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
               --depends-on shipping_details-db \
@@ -130,6 +172,7 @@ jobs:
               -p 80:80 \
               -e GIN_MODE=release \
               -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
+              -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
               --depends-on shipping_details-db \
@@ -166,7 +209,7 @@ jobs:
               -p 80:80 \
               -e GIN_MODE=release \
               -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
-              -e shipping_details_BROKER=kafka:29092 \
+              -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
               --depends-on shipping_details-db \
@@ -201,7 +244,7 @@ jobs:
               -p 80:80 \
               -e GIN_MODE=release \
               -e shipping_details_URI=mongodb://${{ secrets.SD_DB_USER }}:${{ secrets.SD_DB_PWD }}@shipping_details-db:27017 \
-              -e shipping_details_BROKER=kafka:29092 \
+              -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
               --depends-on shipping_details-db \
