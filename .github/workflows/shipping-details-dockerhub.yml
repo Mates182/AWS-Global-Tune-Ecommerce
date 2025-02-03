@@ -1,9 +1,7 @@
 name: Push Shipping Details Services to Docker Hub
 
 on:
-  push:
-    branches:
-      - qa-aws-deploy
+  workflow_dispatch:  # Allows manual execution from GitHub Actions UI
 
 jobs:
   push_to_registry:
