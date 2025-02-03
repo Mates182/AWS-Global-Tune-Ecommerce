@@ -11,6 +11,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: Deploy to EC2 - Shipping Details Replicant
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_REPLICANT }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest image for Shipping Details Replicant..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-replicant:latest
+
+            echo "Stopping and removing existing container..."
+            sudo docker stop shipping_details_replicant || echo "No existing container"
+            sudo docker rm shipping_details_replicant || echo "No existing container"
+
+            echo "Starting Shipping Details Replicant container..."
+            sudo docker run -d --name shipping_details_replicant \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
+              ${{ secrets.DOCKER_USERNAME }}/shipping-details-replicant:latest
+
       - name: Deploy to EC2 - Create Shipping Details (With MongoDB)
         uses: appleboy/ssh-action@master
         with:
@@ -18,6 +39,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            docker network create app-network
             echo "Pulling latest images for Create Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/create-shipping-details:latest
@@ -52,6 +74,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            docker network create app-network
             echo "Pulling latest images for Delete Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/delete-shipping-details:latest
@@ -86,6 +109,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            docker network create app-network
             echo "Pulling latest images for Get Shipping Details By ID..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-shipping-details-by-id:latest
@@ -122,6 +146,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            docker network create app-network
             echo "Pulling latest images for update Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/update-shipping-details:latest
@@ -156,6 +181,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            docker network create app-network
             echo "Pulling latest images for list Shipping Details..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/list-shipping-details:latest
