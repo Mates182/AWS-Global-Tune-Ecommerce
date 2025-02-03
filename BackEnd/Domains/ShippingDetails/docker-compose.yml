@@ -1,0 +1,203 @@
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - app-network
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    networks:
+      - app-network
+    depends_on:
+      - zookeeper
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  shipping_details-replicant:
+    build: ./shipping_details_replicant
+    ports:
+      - "8080:80"
+    container_name: shipping_details-replicant
+    environment:
+      - GIN_MODE=release
+      - shipping_details_BROKER=kafka:29092
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+    depends_on:
+      - kafka
+
+  get_shipping_details_by_id:
+    build: ./get_shipping_details_by_id
+    container_name: get_shipping_details_by_id
+    environment:
+      - GIN_MODE=release
+      - shipping_details_URI=mongodb://user:password@shipping_details-db-6000:27017
+      - shipping_details_BROKER=kafka:29092
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    ports:
+      - "7000:80"
+    restart: unless-stopped
+    depends_on:
+      - shipping_details-db-6000
+      - shipping_details-replicant
+
+  shipping_details-db-6000:
+    build:
+      context: ../../DataBases/ShippingDetails
+      dockerfile: Dockerfile
+    container_name: shipping_details-db-6000
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "6000:27017"
+    networks:
+      - app-network
+
+  list_shipping_details:
+    build: ./list_shipping_details
+    container_name: list_shipping_details
+    environment:
+      - GIN_MODE=release
+      - shipping_details_URI=mongodb://user:password@shipping_details-db-6001:27017
+      - shipping_details_BROKER=kafka:29092
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    ports:
+      - "7001:80"
+    restart: unless-stopped
+    depends_on:
+      - shipping_details-db-6001
+      - shipping_details-replicant
+
+  shipping_details-db-6001:
+    build:
+      context: ../../DataBases/ShippingDetails
+      dockerfile: Dockerfile
+    container_name: shipping_details-db-6001
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "6001:27017"
+    networks:
+      - app-network
+
+  update_shipping_details:
+    build: ./update_shipping_details
+    container_name: update_shipping_details
+    environment:
+      - GIN_MODE=release
+      - shipping_details_URI=mongodb://user:password@shipping_details-db-6002:27017
+      - shipping_details_BROKER=kafka:29092
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    ports:
+      - "7002:80"
+    restart: unless-stopped
+    depends_on:
+      - shipping_details-db-6002
+      - shipping_details-replicant
+
+  shipping_details-db-6002:
+    build:
+      context: ../../DataBases/ShippingDetails
+      dockerfile: Dockerfile
+    container_name: shipping_details-db-6002
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "6002:27017"
+    networks:
+      - app-network
+
+  delete_shipping_details:
+    build: ./delete_shipping_details
+    container_name: delete_shipping_details
+    environment:
+      - GIN_MODE=release
+      - shipping_details_URI=mongodb://user:password@shipping_details-db-6003:27017
+      - shipping_details_BROKER=kafka:29092
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    ports:
+      - "7003:80"
+    restart: unless-stopped
+    depends_on:
+      - shipping_details-db-6003
+      - shipping_details-replicant
+
+  shipping_details-db-6003:
+    build:
+      context: ../../DataBases/ShippingDetails
+      dockerfile: Dockerfile
+    container_name: shipping_details-db-6003
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "6003:27017"
+    networks:
+      - app-network
+
+  create_shipping_details:
+    build: ./create_shipping_details
+    container_name: create_shipping_details
+    environment:
+      - GIN_MODE=release
+      - shipping_details_URI=mongodb://user:password@shipping_details-db-6004:27017
+      - shipping_details_BROKER=kafka:29092
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    ports:
+      - "7004:80"
+    restart: unless-stopped
+    depends_on:
+      - shipping_details-db-6004
+      - shipping_details-replicant
+
+  shipping_details-db-6004:
+    build:
+      context: ../../DataBases/ShippingDetails
+      dockerfile: Dockerfile
+    container_name: shipping_details-db-6004
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "6004:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
