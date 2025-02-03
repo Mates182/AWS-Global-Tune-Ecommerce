@@ -30,6 +30,7 @@ jobs:
               -p 80:80 \
               -e GIN_MODE=release \
               -e shipping_details_BROKER=${{ secrets.SD_BROKER }} \
+              --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/shipping-details-replicant:latest
 
       - name: Deploy to EC2 - Create Shipping Details (With MongoDB)
