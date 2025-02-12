@@ -9,8 +9,8 @@ from dotenv import load_dotenv, dotenv_values
 
 load_dotenv()
 
-client = MongoClient(os.getenv("MONGO_URI"))
-db = client["globaltune_products"]
+client = MongoClient(os.getenv("products_URI"))
+db = client["products"]
 products_collection = db["products"]
 
 @strawberry.type
