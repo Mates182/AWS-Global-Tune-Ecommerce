@@ -1,0 +1,77 @@
+name: Run Auth Services on AWS EC2
+
+on:
+  push:
+    branches:
+      - qa-aws-deploy
+    paths:
+      - 'BackEnd/Domains/Auth/**'
+
+jobs:
+  deploy:
+    name: Deploy Services on AWS EC2
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Deploy to EC2 - Role Authentication
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_AUTH_ROLE }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest image for Role Authentication..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/role-auth:latest
+
+            echo "Stopping and removing existing container..."
+            sudo docker stop role-auth || echo "No existing container"
+            sudo docker rm role-auth || echo "No existing container"
+
+            echo "Starting Role Auth container..."
+            sudo docker run -d --name role-auth \
+              -p 80:80 \
+              -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/role-auth:latest
+
+      - name: Deploy to EC2 - Login
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_AUTH_LOGIN }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest image for Login..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/login:latest
+
+            echo "Stopping and removing existing container..."
+            sudo docker stop login || echo "No existing container"
+            sudo docker rm login || echo "No existing container"
+
+            echo "Starting Login container..."
+            sudo docker run -d --name login \
+              -p 80:80 \
+              -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/login:latest
+
+      - name: Deploy to EC2 - Logout
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_AUTH_LOGOUT }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest image for Logout..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/logout:latest
+
+            echo "Stopping and removing existing container..."
+            sudo docker stop logout || echo "No existing container"
+            sudo docker rm logout || echo "No existing container"
+
+            echo "Starting Logout container..."
+            sudo docker run -d --name logout \
+              -p 80:80 \
+              -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/logout:latest
