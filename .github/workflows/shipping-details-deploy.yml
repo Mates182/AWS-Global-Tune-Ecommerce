@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - qa-aws-deploy
+    paths:
+      - 'BackEnd/Domains/ShippingDetails/**'
 
 jobs:
   deploy:

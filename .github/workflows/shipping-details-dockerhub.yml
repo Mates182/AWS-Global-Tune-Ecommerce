@@ -1,7 +1,11 @@
 name: Push Shipping Details Services to Docker Hub
 
 on:
-  workflow_dispatch:  # Allows manual execution from GitHub Actions UI
+  push:
+    branches:
+      - qa-aws-deploy
+    paths:
+      - 'BackEnd/Domains/ShippingDetails/**'
 
 jobs:
   push_to_registry:
