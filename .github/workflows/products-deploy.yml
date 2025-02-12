@@ -5,7 +5,7 @@ on:
     branches:
       - qa-aws-deploy
     paths:
-      - 'BackEnd/Domains/ShippingDetails/**'
+      - 'BackEnd/Domains/Products/**'
 
 jobs:
   deploy:
