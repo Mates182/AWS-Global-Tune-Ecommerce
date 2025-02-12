@@ -6,6 +6,7 @@ on:
       - qa-aws-deploy
     paths:
       - 'BackEnd/Domains/Products/**'
+      - '.github/workflows/products-dockerhub.yml'
 
 jobs:
   push_to_registry:
