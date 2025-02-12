@@ -1,0 +1,216 @@
+name: Run Products Services on AWS EC2
+
+on:
+  push:
+    branches:
+      - qa-aws-deploy
+    paths:
+      - 'BackEnd/Domains/ShippingDetails/**'
+
+jobs:
+  deploy:
+    name: Deploy Services on AWS EC2
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Deploy to EC2 - Products Replicant
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_PROD_REPLICANT }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest image for Products Replicant..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
+
+            echo "Stopping and removing existing container..."
+            sudo docker stop product_replicant || echo "No existing container"
+            sudo docker rm product_replicant || echo "No existing container"
+
+            echo "Starting Products Replicant container..."
+            sudo docker run -d --name product_replicant \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e products_BROKER=${{ secrets.PROD_BROKER }} \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
+
+      - name: Deploy to EC2 - Create Products (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_PROD_CREATE }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker network create app-network
+            echo "Pulling latest images for Create Products..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/products-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/create-product:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop products-db create_product || echo "No existing containers"
+            sudo docker rm products-db create_product || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name products-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.PROD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.PROD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/products-db:latest
+
+            echo "Starting Create Products container..."
+            sudo docker run -d --name create_product \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@products-db:27017 \
+              -e products_BROKER=${{ secrets.SD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/create-product:latest
+
+      - name: Deploy to EC2 - Delete Products (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_PROD_DELETE }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker network create app-network
+            echo "Pulling latest images for Delete Products..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/products-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/delete-product:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop shipping_details-db delete_product || echo "No existing containers"
+            sudo docker rm shipping_details-db delete_product || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name products-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.PROD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.PROD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/products-db:latest
+
+            echo "Starting Delete Products container..."
+            sudo docker run -d --name delete_product \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@products-db:27017 \
+              -e products_BROKER=${{ secrets.PROD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/delete-product:latest
+
+      - name: Deploy to EC2 - Get Products By ID (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_SD_GET_BY_ID }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker network create app-network
+            echo "Pulling latest images for Get Products By ID..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/get-product-by-id:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop get_product_by_id || echo "No existing containers"
+            sudo docker rm  get_product_by_id || echo "No existing containers"
+
+            echo "Starting Get Products By ID container..."
+            sudo docker run -d --name get_product_by_id \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@${{ secrets.EC2_HOST_PROD_DELETE }}:27017 \
+              -e products_BROKER=${{ secrets.PROD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/get-product-by-id:latest
+
+
+
+      - name: Deploy to EC2 - UPDATE Products (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_PROD_UPDATE }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker network create app-network
+            echo "Pulling latest images for update Products..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/products-db:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/update-product:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop products-db update_product || echo "No existing containers"
+            sudo docker rm products-db update_product || echo "No existing containers"
+
+            echo "Starting MongoDB container..."
+            sudo docker run -d --name products-db \
+              -p 27017:27017 \
+              -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.PROD_DB_USER }} \
+              -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.PROD_DB_PWD }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/products-db:latest
+
+            echo "Starting update Products container..."
+            sudo docker run -d --name update_product \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@products-db:27017 \
+              -e products_BROKER=${{ secrets.PROD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/update-product:latest
+
+      - name: Deploy to EC2 - list Products (With MongoDB)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_PROD_LIST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker network create app-network
+            echo "Pulling latest images for list Products..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/list-products:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop list_products || echo "No existing containers"
+            sudo docker rm list_products || echo "No existing containers"
+
+            echo "Starting list Products container..."
+            sudo docker run -d --name list_products \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@${{  secrets.EC2_HOST_PROD_CREATE  }}:27017 \
+              -e products_BROKER=${{ secrets.PROD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/list-products:latest
+
+      - name: Deploy to EC2 - Upload Image to s3
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_UPIMG }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker network create app-network
+            echo "Pulling latest images for upload image..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/upload-image-s3:latest
+
+            echo "Stopping and removing existing containers..."
+            sudo docker stop upload_image_s3 || echo "No existing containers"
+            sudo docker rm upload_image_s3 || echo "No existing containers"
+
+            echo "Starting upload image to s3 container..."
+            sudo docker run -d --name upload_image_s3 \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/upload-image-s3:latest
