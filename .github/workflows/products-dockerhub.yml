@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./BackEnd/Domains/Products/GetProductById
-          file: ./BackEnd/Domains/Products/GetProductByIdDockerfile
+          file: ./BackEnd/Domains/Products/GetProductById/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/get-product-by-id:latest
 
