@@ -125,7 +125,7 @@ jobs:
             sudo docker run -d --name get_product_by_id \
               -p 80:80 \
               -e GIN_MODE=release \
-              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@${{ secrets.EC2_HOST_PROD_DELETE }}:27017 \
+              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@${{ secrets.PROD_DB_IP }}:27017 \
               -e products_BROKER=${{ secrets.PROD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
@@ -187,7 +187,7 @@ jobs:
             sudo docker run -d --name list_products \
               -p 80:80 \
               -e GIN_MODE=release \
-              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@${{  secrets.EC2_HOST_PROD_CREATE  }}:27017 \
+              -e products_URI=mongodb://${{ secrets.PROD_DB_USER }}:${{ secrets.PROD_DB_PWD }}@${{ secrets.PROD_DB_IP }}:27017 \
               -e products_BROKER=${{ secrets.PROD_BROKER }} \
               --network app-network \
               --restart unless-stopped \
