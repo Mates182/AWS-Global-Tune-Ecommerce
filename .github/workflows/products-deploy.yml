@@ -32,7 +32,7 @@ jobs:
 
             echo "Starting upload image to s3 container..."
             sudo docker run -d --name upload_image_s3 \
-              -p 81:80 \
+              -p 80:80 \
               -e GIN_MODE=release \
               --network app-network \
               --restart unless-stopped \
@@ -55,7 +55,7 @@ jobs:
 
             echo "Starting Products Replicant container..."
             sudo docker run -d --name product_replicant \
-              -p 80:80 \
+              -p 85:80 \
               -e GIN_MODE=release \
               -e products_BROKER=${{ secrets.PROD_BROKER }} \
               --network app-network \
