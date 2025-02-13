@@ -1,6 +1,8 @@
 package service
 
 import (
+	"database/sql"
+	"log"
 	"login-service/business-logic"
 	"login-service/data/request"
 	"login-service/data/response"
@@ -9,39 +11,44 @@ import (
 
 type LoginServiceImpl struct {
 	JWTKey []byte
+	DB     *sql.DB
 }
 
-func NewLoginServiceImpl(jwtKey []byte) LoginService {
+func NewLoginServiceImpl(jwtKey []byte, db *sql.DB) LoginService {
 	return &LoginServiceImpl{
 		JWTKey: jwtKey,
+		DB:     db,
 	}
 }
 
 func (service *LoginServiceImpl) LoginUser(credentials request.Request) (int, response.Response, *http.Cookie) {
-	// TODO: Validate with real data
-	if credentials.Email == "admin@admin" && credentials.Password == "admin" {
+	var userID, name, email, role string
 
-		userID := "12345"
-		role := "admin"
-		jwtKey := service.JWTKey
-		token, err := business.CreateToken(credentials.Email, userID, role, jwtKey)
-		if err != nil {
-			return http.StatusInternalServerError, response.Response{Message: "Could not generate token"}, nil
+	query := "CALL GetUserByEmailAndPassword(?, ?)"
+	err := service.DB.QueryRow(query, credentials.Email, credentials.Password).Scan(&userID, &name, &email, &role)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return http.StatusUnauthorized, response.Response{Message: "Invalid credentials"}, nil
 		}
-
-		cookie := &http.Cookie{
-			Name:     "token",
-			Value:    token,
-			Path:     "/",
-			Domain:   "localhost",
-			HttpOnly: true,
-			Secure:   false, // Change to true on production
-			MaxAge:   3600,
-			SameSite: http.SameSiteLaxMode,
-		}
-
-		return http.StatusOK, response.Response{Message: "Login successful"}, cookie
-
+		log.Printf("Database error: %v", err)
+		return http.StatusInternalServerError, response.Response{Message: "Database error"}, nil
 	}
-	return http.StatusUnauthorized, response.Response{Message: "Invalid credentials"}, nil
+
+	token, err := business.CreateToken(email, userID, role, service.JWTKey)
+	if err != nil {
+		return http.StatusInternalServerError, response.Response{Message: "Could not generate token"}, nil
+	}
+
+	cookie := &http.Cookie{
+		Name:     "token",
+		Value:    token,
+		Path:     "/",
+		Domain:   "localhost",
+		HttpOnly: true,
+		Secure:   false,
+		MaxAge:   3600,
+		SameSite: http.SameSiteLaxMode,
+	}
+
+	return http.StatusOK, response.Response{Message: "Login successful"}, cookie
 }

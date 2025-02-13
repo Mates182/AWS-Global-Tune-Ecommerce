@@ -46,6 +46,11 @@ jobs:
             sudo docker run -d --name login \
               -p 81:80 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
+              -e DB_HOST=${{ secrets.USERS_DB_HOST }} \
+              -e DB_USER=${{ secrets.USERS_DB_USER }} \
+              -e DB_PASSWORD=${{ secrets.USERS_DB_PASSWORD }} \
+              -e DB_PORT=${{ secrets.USERS_DB_PORT }} \
+              -e DB_NAME=${{ secrets.USERS_DB_NAME }} \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/login:latest
 

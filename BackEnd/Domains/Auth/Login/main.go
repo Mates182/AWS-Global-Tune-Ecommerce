@@ -2,6 +2,7 @@ package main
 
 import (
 	"login-service/controllers"
+	"login-service/database"
 	_ "login-service/docs"
 	"login-service/router"
 	"login-service/secrets"
@@ -16,8 +17,13 @@ import (
 // @host 		localhost:80
 // @BasePath 	/
 func main() {
+	// Load secrets
+	secrets.LoadEnv()
+	// Get singleton DB instance
+	db := database.GetDBInstance()
+	defer db.Close() // Ensure DB is closed when the app exits
 	jwtKey := secrets.GetJWTKey()
-	loginService := service.NewLoginServiceImpl(jwtKey)
+	loginService := service.NewLoginServiceImpl(jwtKey, db)
 	loginController := controllers.NewLoginController(loginService)
 	router := router.SetupRouter(loginController)
 	router.Run("0.0.0.0:80")
