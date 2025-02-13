@@ -6,6 +6,7 @@ on:
       - qa-aws-deploy
     paths:
       - 'BackEnd/Domains/Auth/**'
+      - '.github/workflows/auth-deploy.yml'
 
 jobs:
   deploy:
@@ -16,7 +17,7 @@ jobs:
       - name: Deploy to EC2 - Role Authentication
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST_AUTH_ROLE }}
+          host: ${{ secrets.EC2_HOST_AUTH }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
@@ -34,13 +35,6 @@ jobs:
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/role-auth:latest
 
-      - name: Deploy to EC2 - Login
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST_AUTH_LOGIN }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
             echo "Pulling latest image for Login..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/login:latest
 
@@ -50,18 +44,11 @@ jobs:
 
             echo "Starting Login container..."
             sudo docker run -d --name login \
-              -p 80:80 \
+              -p 81:80 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/login:latest
 
-      - name: Deploy to EC2 - Logout
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST_AUTH_LOGOUT }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
             echo "Pulling latest image for Logout..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/logout:latest
 
@@ -71,7 +58,7 @@ jobs:
 
             echo "Starting Logout container..."
             sudo docker run -d --name logout \
-              -p 80:80 \
+              -p 82:80 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/logout:latest
