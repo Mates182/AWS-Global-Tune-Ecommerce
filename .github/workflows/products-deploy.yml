@@ -22,21 +22,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo docker network create app-network
-            echo "Pulling latest image for Products Replicant..."
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
-
-            echo "Stopping and removing existing container..."
-            sudo docker stop product_replicant || echo "No existing container"
-            sudo docker rm product_replicant || echo "No existing container"
-
-            echo "Starting Products Replicant container..."
-            sudo docker run -d --name product_replicant \
-              -p 80:80 \
-              -e GIN_MODE=release \
-              -e products_BROKER=kafka:29092 \
-              --network app-network \
-              --restart unless-stopped \
-              ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
 
             echo "Pulling latest images for upload image..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/upload-image-s3:latest
@@ -61,6 +46,22 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo docker network create app-network
+            echo "Pulling latest image for Products Replicant..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
+
+            echo "Stopping and removing existing container..."
+            sudo docker stop product_replicant || echo "No existing container"
+            sudo docker rm product_replicant || echo "No existing container"
+
+            echo "Starting Products Replicant container..."
+            sudo docker run -d --name product_replicant \
+              -p 80:80 \
+              -e GIN_MODE=release \
+              -e products_BROKER=${{ secrets.PROD_BROKER }} \
+              --network app-network \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
+
             echo "Pulling latest images for Create Products..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/products-db:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/create-product:latest
