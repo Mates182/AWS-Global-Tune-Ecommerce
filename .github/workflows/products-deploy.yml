@@ -93,8 +93,8 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/delete-product:latest
 
             echo "Stopping and removing existing containers..."
-            sudo docker stop shipping_details-db-2 delete_product || echo "No existing containers"
-            sudo docker rm shipping_details-db-2 delete_product || echo "No existing containers"
+            sudo docker stop products-db-2 delete_product || echo "No existing containers"
+            sudo docker rm products-db-2 delete_product || echo "No existing containers"
 
             echo "Starting MongoDB container..."
             sudo docker run -d --name products-db-2 \
