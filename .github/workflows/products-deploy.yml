@@ -21,6 +21,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            sudo docker network create app-network
             echo "Pulling latest image for Products Replicant..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
 
@@ -33,6 +34,7 @@ jobs:
               -p 80:80 \
               -e GIN_MODE=release \
               -e products_BROKER=kafka:29092 \
+              --network app-network \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/product-replicant:latest
 
