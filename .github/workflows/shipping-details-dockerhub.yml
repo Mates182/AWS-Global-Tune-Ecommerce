@@ -6,6 +6,7 @@ on:
       - qa-aws-deploy
     paths:
       - 'BackEnd/Domains/ShippingDetails/**'
+      - '.github/workflows/shipping-details-dockerhub.yml'
 
 jobs:
   push_to_registry:
