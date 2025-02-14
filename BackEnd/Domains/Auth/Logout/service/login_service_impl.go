@@ -38,7 +38,7 @@ func (service *LogoutServiceImpl) LogoutUser(logoutReq request.Request) (int, re
 		HttpOnly: true,
 		Secure:   false,
 		MaxAge:   -1,
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteNoneMode,
 	}
 
 	return http.StatusOK, response.Response{Message: "Logged out successfully"}, cookie
