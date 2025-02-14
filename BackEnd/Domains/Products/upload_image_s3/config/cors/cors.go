@@ -7,11 +7,12 @@ import (
 
 func GetCORSConfig() gin.HandlerFunc {
 	corsConfig := cors.New(cors.Config{
-		AllowOrigins:  []string{"*"},
-		AllowMethods:  []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:  []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders: []string{"Content-Length"},
-		MaxAge:        12 * 3600, // 12 hours cache time
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"*"},
+		AllowHeaders:     []string{"*"},
+		AllowCredentials: true,
+		ExposeHeaders:    []string{"Content-Length"},
+		MaxAge:           12 * 3600, // 12 hours cache time
 	})
 
 	return corsConfig
