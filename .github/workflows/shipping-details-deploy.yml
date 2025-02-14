@@ -19,7 +19,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_SD_REPLICANT }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY_UPLOAD }}
           script: |
             echo "Pulling latest image for Shipping Details Replicant..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shipping-details-replicant:latest
@@ -41,7 +41,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_SD_CREATE }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY_UPLOAD }}
           script: |
             sudo docker network create app-network
             echo "Pulling latest images for Create Shipping Details..."
@@ -76,7 +76,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_SD_DELETE }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY_UPLOAD }}
           script: |
             sudo docker network create app-network
             echo "Pulling latest images for Delete Shipping Details..."
@@ -111,7 +111,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_SD_GET_BY_ID }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY_UPLOAD }}
           script: |
             sudo docker network create app-network
             echo "Pulling latest images for Get Shipping Details By ID..."
@@ -148,7 +148,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_SD_UPDATE }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY_UPLOAD }}
           script: |
             sudo docker network create app-network
             echo "Pulling latest images for update Shipping Details..."
@@ -183,7 +183,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_SD_LIST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY_UPLOAD }}
           script: |
             sudo docker network create app-network
             echo "Pulling latest images for list Shipping Details..."
