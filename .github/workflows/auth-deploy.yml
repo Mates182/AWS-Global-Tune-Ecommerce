@@ -21,6 +21,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            sudo docker network create app-network  
             echo "Pulling latest image for Role Authentication..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/role-auth:latest
 
@@ -32,6 +33,7 @@ jobs:
             sudo docker run -d --name role-auth \
               -p 80:80 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
+              --network app-network \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/role-auth:latest
 
@@ -51,6 +53,7 @@ jobs:
               -e DB_PASSWORD=${{ secrets.USERS_DB_PASSWORD }} \
               -e DB_PORT=${{ secrets.USERS_DB_PORT }} \
               -e DB_NAME=${{ secrets.USERS_DB_NAME }} \
+              --network app-network \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/login:latest
 
@@ -65,5 +68,6 @@ jobs:
             sudo docker run -d --name logout \
               -p 82:80 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
+              --network app-network \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/logout:latest

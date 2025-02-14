@@ -17,10 +17,11 @@ jobs:
       - name: Deploy to EC2 - Frontend
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST_FRONT }}
+          host: ${{ secrets.EC2_HOST_AUTH }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            sudo docker network create app-network  
             echo "Pulling latest image for Frontend..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/gt-frontend:latest
 
@@ -34,5 +35,6 @@ jobs:
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
               -e PRODUCTS_GET_ENDPOINT=${{ secrets.PROD_GET_ENP }} \
               -e PRODUCTS_LIST_ENDPOINT=${{ secrets.PROD_LIST_ENP }} \
+              --network app-network \
               --restart unless-stopped \
               ${{ secrets.DOCKER_USERNAME }}/gt-frontend:latest
