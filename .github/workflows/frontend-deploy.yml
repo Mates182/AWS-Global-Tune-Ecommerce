@@ -30,7 +30,7 @@ jobs:
 
             echo "Starting Role Auth container..."
             sudo docker run -d --name gt-frontend \
-              -p 80:80 \
+              -p 80:3000 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
               -e PRODUCTS_GET_ENDPOINT=${{ secrets.PROD_GET_ENP }} \
               -e PRODUCTS_LIST_ENDPOINT=${{ secrets.PROD_LIST_ENP }} \
