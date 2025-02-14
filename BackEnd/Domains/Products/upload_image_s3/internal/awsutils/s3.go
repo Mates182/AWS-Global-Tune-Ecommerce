@@ -41,10 +41,10 @@ func uploadImageToS3(file multipart.File, filename string) (string, error) {
 
 	// Prepare the upload parameters (no ACL parameter, since ACLs are not allowed)
 	params := &s3.PutObjectInput{
-		Bucket:      aws.String("globaltune-products-images"), // Replace with your bucket name
-		Key:         aws.String(filename),                     // Filename in S3
-		Body:        file,                                     // The file to upload
-		ContentType: aws.String(contentType),                  // Set the correct content type
+		Bucket:      aws.String("globaltune-products-images-qa"), // Replace with your bucket name
+		Key:         aws.String(filename),                        // Filename in S3
+		Body:        file,                                        // The file to upload
+		ContentType: aws.String(contentType),                     // Set the correct content type
 	}
 
 	// Upload the file to S3
@@ -54,7 +54,7 @@ func uploadImageToS3(file multipart.File, filename string) (string, error) {
 	}
 
 	// Construct the URL for the uploaded image
-	imageURL := fmt.Sprintf("https://%s.s3.amazonaws.com/%s", "globaltune-products-images", filename)
+	imageURL := fmt.Sprintf("https://%s.s3.amazonaws.com/%s", "globaltune-products-images-qa", filename)
 
 	return imageURL, nil
 }

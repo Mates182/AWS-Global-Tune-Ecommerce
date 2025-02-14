@@ -1,7 +1,5 @@
-const PRODUCTS_ENDPOINT = process.env.PRODUCTS_ENDPOINT;
-
 export const loadProducts = async () => {
-  const res = await fetch(`${PRODUCTS_ENDPOINT}/all/`, {
+  const res = await fetch(process.env.PRODUCTS_LIST_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +31,7 @@ export const loadProducts = async () => {
 };
 
 export const loadCategories = async () => {
-  const res = await fetch(`${PRODUCTS_ENDPOINT}/all/`, {
+  const res = await fetch(process.env.PRODUCTS_LIST_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +66,7 @@ export const loadCategories = async () => {
 };
 
 export const loadProduct = async (productId) => {
-  const res = await fetch(`${PRODUCTS_ENDPOINT}/id/`, {
+  const res = await fetch(process.env.PRODUCTS_GET_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -101,7 +99,7 @@ export const loadProduct = async (productId) => {
 };
 
 export const createProduct = async (body) => {
-  const response = await fetch(`${PRODUCTS_ENDPOINT}/create`, {
+  const response = await fetch(process.env.PRODUCTS_CREATE_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
