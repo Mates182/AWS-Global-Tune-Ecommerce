@@ -1,6 +1,6 @@
 export const loginAuth = async (body) => {
   console.log(JSON.stringify(body));
-  const response = await fetch(`http://18.208.109.124:81/login`, {
+  const response = await fetch(`http://3.84.60.208:81/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -15,7 +15,7 @@ export const loginAuth = async (body) => {
 };
 
 export const logout = async () => {
-  const response = await fetch(`http://18.208.109.124:82/logout`, {
+  const response = await fetch(`http://3.84.60.208:82/logout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
