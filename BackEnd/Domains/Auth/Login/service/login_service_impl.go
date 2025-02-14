@@ -43,7 +43,7 @@ func (service *LoginServiceImpl) LoginUser(credentials request.Request) (int, re
 		Name:     "token",
 		Value:    token,
 		Path:     "/",
-		Domain:   "localhost",
+		Domain:   "0.0.0.0",
 		HttpOnly: true,
 		Secure:   false,
 		MaxAge:   3600,

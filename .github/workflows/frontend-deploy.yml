@@ -1,0 +1,38 @@
+name: Run frontend Services on AWS EC2
+
+on:
+  push:
+    branches:
+      - qa-aws-deploy
+    paths:
+      - 'FrontEnd/**'
+      - '.github/workflows/frontend-deploy.yml'
+
+jobs:
+  deploy:
+    name: Deploy Services on AWS EC2
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Deploy to EC2 - Frontend
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_FRONT }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Pulling latest image for Frontend..."
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/gt-frontend:latest
+
+            echo "Stopping and removing existing container..."
+            sudo docker stop gt-frontend || echo "No existing container"
+            sudo docker rm gt-frontend || echo "No existing container"
+
+            echo "Starting Role Auth container..."
+            sudo docker run -d --name gt-frontend \
+              -p 80:80 \
+              -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
+              -e PRODUCTS_GET_ENDPOINT=${{ secrets.PROD_GET_ENP }} \
+              -e PRODUCTS_LIST_ENDPOINT=${{ secrets.PROD_LIST_ENP }} \
+              --restart unless-stopped \
+              ${{ secrets.DOCKER_USERNAME }}/gt-frontend:latest

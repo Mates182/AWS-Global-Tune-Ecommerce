@@ -34,7 +34,7 @@ func (service *LogoutServiceImpl) LogoutUser(logoutReq request.Request) (int, re
 		Name:     "token",
 		Value:    "",
 		Path:     "/",
-		Domain:   "localhost",
+		Domain:   "0.0.0.0",
 		HttpOnly: true,
 		Secure:   false,
 		MaxAge:   -1,
