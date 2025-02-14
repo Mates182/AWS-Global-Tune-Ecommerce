@@ -71,6 +71,8 @@ func UploadImageHandler(c *gin.Context) {
 	// Open the uploaded file
 	file, err := req.Image.Open()
 	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Error opening file")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to open file"})
 		return
 	}
@@ -85,6 +87,8 @@ func UploadImageHandler(c *gin.Context) {
 	// Upload to S3 and get the image URL
 	imageURL, err := uploadImageToS3(file, finalFilename)
 	if err != nil {
+		fmt.Println(err)
+		fmt.Println("Error upload file")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to upload to S3", "message": err.Error()})
 		return
 	}
