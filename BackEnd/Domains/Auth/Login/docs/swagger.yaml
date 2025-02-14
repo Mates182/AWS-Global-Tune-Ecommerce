@@ -12,7 +12,7 @@ definitions:
       message:
         type: string
     type: object
-host: localhost:80
+host: https://3.84.60.208
 info:
   contact: {}
   description: |-
