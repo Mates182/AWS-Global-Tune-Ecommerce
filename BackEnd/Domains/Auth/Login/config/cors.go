@@ -6,11 +6,11 @@ import (
 )
 
 func GetCORSConfig() gin.HandlerFunc {
-	corsConfig := cors.New(cors.Config{
-		AllowOrigins:     []string{"http://52.90.4.29:80"},
-		AllowMethods:     []string{"*"},
-		AllowHeaders:     []string{"*"},
+	corsConfig := cors.Config{
+		AllowOrigins:     []string{"http://52.90.4.29"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
-	})
-	return corsConfig
+	}
+	return cors.New(corsConfig)
 }
