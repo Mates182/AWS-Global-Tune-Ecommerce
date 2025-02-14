@@ -1,6 +1,6 @@
 const PRODUCTS_CREATE_ENDPOINT = `http://172.31.23.6/create`;
-const PRODUCTS_LIST_ENDPOINT = process.env.PRODUCTS_LIST_ENDPOINT;
-const PRODUCTS_GET_ENDPOINT = process.env.PRODUCTS_GET_ENDPOINT;
+const PRODUCTS_LIST_ENDPOINT = `http://54.91.202.144/graphql`;
+const PRODUCTS_GET_ENDPOINT = `http://54.91.202.144:81/graphql`;
 const PRODUCTS_UPLOAD_ENDPOINT = `http://54.159.208.108/upload`;
 
 export const loadProducts = async () => {
