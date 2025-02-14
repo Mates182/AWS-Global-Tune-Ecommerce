@@ -43,11 +43,11 @@ func (service *LoginServiceImpl) LoginUser(credentials request.Request) (int, re
 		Name:     "token",
 		Value:    token,
 		Path:     "/",
-		Domain:   "http://52.90.4.29",
+		Domain:   "52.90.4.29",
 		HttpOnly: true,
-		Secure:   false,
+		Secure:   true,
 		MaxAge:   3600,
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteNoneMode,
 	}
 
 	return http.StatusOK, response.Response{Message: "Login successful"}, cookie

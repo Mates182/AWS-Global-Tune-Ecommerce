@@ -46,7 +46,7 @@ jobs:
 
             echo "Starting Login container..."
             sudo docker run -d --name login \
-              -p 81:80 \
+              -p 443:443 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
               -e DB_HOST=${{ secrets.USERS_DB_HOST }} \
               -e DB_USER=${{ secrets.USERS_DB_USER }} \

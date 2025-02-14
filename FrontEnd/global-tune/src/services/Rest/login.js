@@ -1,6 +1,6 @@
 export const loginAuth = async (body) => {
   console.log(JSON.stringify(body));
-  const response = await fetch(`login/login`, {
+  const response = await fetch(`https://3.84.60.208/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

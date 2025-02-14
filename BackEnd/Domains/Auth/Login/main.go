@@ -26,5 +26,5 @@ func main() {
 	loginService := service.NewLoginServiceImpl(jwtKey, db)
 	loginController := controllers.NewLoginController(loginService)
 	router := router.SetupRouter(loginController)
-	router.Run("0.0.0.0:80")
+	router.RunTLS("0.0.0.0:443", "/root/cert.pem", "/root/key.pem")
 }
