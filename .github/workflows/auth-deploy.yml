@@ -31,7 +31,7 @@ jobs:
 
             echo "Starting Role Auth container..."
             sudo docker run -d --name role-auth \
-              -p 80:80 \
+              -p 83:80 \
               -e SECRET_KEY=${{ secrets.AUTH_SECRET_KEY }} \
               --network app-network \
               --restart unless-stopped \
