@@ -14,7 +14,7 @@ import (
 // @description RESTful API for user authentication in the GlobalTune E-Commerce platform.
 // @description This API provides secure login functionality using JWT tokens and the Gin framework.
 
-// @host 		https://3.84.60.208
+// @host 		3.84.60.208
 // @BasePath 	/
 func main() {
 	// Load secrets
